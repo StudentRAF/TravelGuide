@@ -1,0 +1,16 @@
+package rs.raf.student.dto.activity;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ActivityGetDto {
+
+    private Long id;
+
+    private String name;
+
+}
