@@ -1,15 +1,15 @@
 package rs.raf.student.repository.user;
 
-import lombok.SneakyThrows;
 import rs.raf.student.domain.Page;
 import rs.raf.student.domain.PageImplementation;
 import rs.raf.student.domain.StatementBuilder;
+import rs.raf.student.dto.user.UserCreateDto;
+import rs.raf.student.dto.user.UserUpdateDto;
 import rs.raf.student.model.User;
 import rs.raf.student.repository.IUserRepository;
 import rs.raf.student.repository.PostgresAbstractRepository;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,11 +76,24 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
         return Optional.empty();
     }
 
-    @SneakyThrows
-    private ResultSet executeById(PreparedStatement statement, Long id) {
-        statement.setLong(1, id);
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return Optional.empty();
+    }
 
-        return statement.executeQuery();
+    @Override
+    public Optional<User> create(UserCreateDto createDto) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<User> update(UserUpdateDto updateDto) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<User> disable(Long id) {
+        return Optional.empty();
     }
 
 }
