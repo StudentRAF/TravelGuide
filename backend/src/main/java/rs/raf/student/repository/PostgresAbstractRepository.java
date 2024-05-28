@@ -13,7 +13,7 @@ public class PostgresAbstractRepository {
     private static Properties properties;
 
     static {
-        try { Class.forName("com.mysql.cj.jdbc.Driver"); }
+        try { Class.forName("org.postgresql.Driver"); }
         catch (ClassNotFoundException exception) { exception.printStackTrace(System.err); }
 
         try { properties = Utilities.loadLocalProperties("application"); }
