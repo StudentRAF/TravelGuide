@@ -19,6 +19,4 @@ public interface IUserRepository {
 
     Optional<User> update(UserUpdateDto updateDto);
 
-    Optional<User> disable(Long id);
-
 }

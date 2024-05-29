@@ -9,6 +9,7 @@ import rs.raf.student.mapper.UserMapper;
 import rs.raf.student.model.User;
 import rs.raf.student.model.UserRole;
 import rs.raf.student.repository.IUserRepository;
+import rs.raf.student.repository.IUserRoleRepository;
 import rs.raf.student.utils.Utilities;
 
 public class UserService {
@@ -18,6 +19,9 @@ public class UserService {
 
     @Inject
     private IUserRepository repository;
+
+    @Inject
+    private IUserRoleRepository userRoleRepository;
 
     public Page<UserGetDto> getAll() {
         Page<User> page = repository.findAll(0, 10);
@@ -32,7 +36,12 @@ public class UserService {
         if (user == null)
             return null;
 
-        return mapper.mapDto(user, new UserRole(user.getRoleId(), "ADMIN"));
+        UserRole userRole = userRoleRepository.findById(user.getRoleId())
+                                     .orElse(null);
+        if (userRole == null)
+            return null;
+
+        return mapper.mapDto(user, userRole);
     }
 
     public UserGetDto create(UserCreateDto createDto) {
@@ -42,7 +51,12 @@ public class UserService {
         if (user == null)
             return null;
 
-        return mapper.mapDto(user, new UserRole(user.getRoleId(), "ADMIN"))t;
+        UserRole userRole = userRoleRepository.findById(user.getRoleId())
+                                              .orElse(null);
+        if (userRole == null)
+            return null;
+
+        return mapper.mapDto(user, userRole);
     }
 
 }

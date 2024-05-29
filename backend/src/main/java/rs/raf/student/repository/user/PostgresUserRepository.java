@@ -54,13 +54,8 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
 
     @Override
     public Optional<User> findById(Long id) {
-        return findById(null, id);
-    }
-
-    private Optional<User> findById(Connection newConnection, Long id) {
-        Connection connection = newConnection == null ?  createConnection() : newConnection;
-
         try(
+            Connection       connection = createConnection();
             StatementBuilder builder    = StatementBuilder.create(connection,
                                                                   """
                                                                   select * from "user"
@@ -87,7 +82,7 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
+    public Optional<User> findByEmail(String email)  {
         try(
             Connection connection       = createConnection();
             StatementBuilder builder    = StatementBuilder.create(connection,
@@ -143,40 +138,49 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
 
         return Optional.of(user);
     }
-///            StatementBuilder builder = StatementBuilder.create(connection,
-//                                                               """
-//                                                               update "user"
-//                                                               set first_name = ?, last_name = ?, email = ?, role_id = ?, enabled = ?
-//                                                               where id = ?
-//                                                               """);
-//            ResultSet resultSet      = builder.setString(updateDto.getFirstName())
-//                                              .setString(updateDto.getLastName())
-//                                              .setString(updateDto.getEmail())
-//                                              .setLong(updateDto.getRoleId())
-//                                              .setBoolean(updateDto.getEnabled())
-//                                              .executeInsert();
+
     @Override
     public Optional<User> update(UserUpdateDto updateDto) {
+        User user = findById(updateDto.getId())
+            .orElse(null);
+
+        if (user == null)
+            return Optional.empty();
+
         try(
             Connection connection = createConnection();
+            StatementBuilder builder = StatementBuilder.create(connection,
+                                                               """
+                                                               update "user"
+                                                               set first_name = ?, last_name = ?, email = ?, role_id = ?, enabled = ?
+                                                               where id = ?
+                                                               """);
+            ResultSet resultSet      = builder.setString(updateDto.getFirstName())
+                                              .setString(updateDto.getLastName())
+                                              .setString(updateDto.getEmail())
+                                              .setLong(updateDto.getRoleId())
+                                              .setBoolean(updateDto.getEnabled())
+                                              .executeInsertReturning(StatementBuilder.create(connection,"""
+                                                                                              select *
+                                                                                              from "user"
+                                                                                              where id = ?
+                                                                                              """)
+                                                                                      .setLong(user.getId()))
         ) {
-            User user = findById(connection, updateDto.getId())
-                .orElse(null);
-
-            if (user == null)
-                return Optional.empty();
-
-
+            if (resultSet.next())
+                return Optional.of(new User(resultSet.getLong("id"),
+                                            resultSet.getString("first_name"),
+                                            resultSet.getString("last_name"),
+                                            resultSet.getString("email"),
+                                            resultSet.getString("salt"),
+                                            resultSet.getString("password"),
+                                            resultSet.getLong("role_id"),
+                                            resultSet.getBoolean("enabled")));
         }
         catch (Exception exception) {
             exception.printStackTrace(System.err);
         }
 
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<User> disable(Long id) {
         return Optional.empty();
     }
 

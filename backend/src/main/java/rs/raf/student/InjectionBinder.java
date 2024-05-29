@@ -9,7 +9,9 @@ import rs.raf.student.mapper.DestinationMapper;
 import rs.raf.student.mapper.UserMapper;
 import rs.raf.student.mapper.UserRoleMapper;
 import rs.raf.student.repository.IUserRepository;
+import rs.raf.student.repository.IUserRoleRepository;
 import rs.raf.student.repository.user.PostgresUserRepository;
+import rs.raf.student.repository.user_role.PostgresUserRoleRepository;
 import rs.raf.student.service.UserService;
 
 public class InjectionBinder extends AbstractBinder {
@@ -17,6 +19,7 @@ public class InjectionBinder extends AbstractBinder {
     @Override
     protected void configure() {
         bind(PostgresUserRepository.class).to(IUserRepository.class).in(Singleton.class);
+        bind(PostgresUserRoleRepository.class).to(IUserRoleRepository.class).in(Singleton.class);
 
         bindAsContract(UserService.class);
 

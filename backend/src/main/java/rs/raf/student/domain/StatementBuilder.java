@@ -5,7 +5,6 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -14,9 +13,7 @@ import java.time.LocalTime;
 
 public class StatementBuilder implements AutoCloseable {
 
-    private final Connection        connection;
     private final PreparedStatement statement;
-    private       Statement         returningStatement;
 
     private       int counter;
     private final int limit;
@@ -36,8 +33,6 @@ public class StatementBuilder implements AutoCloseable {
             throw new IllegalArgumentException("Page size number cannot be negative number!");
 
         StringBuilder sqlStatement = new StringBuilder(sql);
-
-        this.connection = connection;
 
         counter = 0;
         limit   = pageSize;
@@ -178,12 +173,10 @@ public class StatementBuilder implements AutoCloseable {
         return statement.getGeneratedKeys();
     }
 
-    public ResultSet executeInsertReturning(String sql) throws SQLException {
+    public ResultSet executeInsertReturning(StatementBuilder builder) throws SQLException {
         executeInsert();
 
-        returningStatement = connection.createStatement();
-
-        return returningStatement.executeQuery(sql);
+        return builder.executeQuery();
     }
 
     public int executeUpdate() throws SQLException {
@@ -209,9 +202,6 @@ public class StatementBuilder implements AutoCloseable {
     @Override
     public void close() throws Exception {
         statement.close();
-
-        if (returningStatement != null)
-            returningStatement.close();
     }
 
 }
