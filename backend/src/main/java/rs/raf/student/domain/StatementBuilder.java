@@ -55,7 +55,8 @@ public class StatementBuilder implements AutoCloseable {
                             offset ?
                             """);
 
-        statement = connection.prepareStatement(sqlStatement.toString());
+        statement = connection.prepareStatement(sqlStatement.toString(),
+                                                PreparedStatement.RETURN_GENERATED_KEYS);
     }
 
     public StatementBuilder setNull(int sqlType) throws SQLException {
@@ -148,14 +149,8 @@ public class StatementBuilder implements AutoCloseable {
         return this;
     }
 
-    public StatementBuilder setTimestamp(LocalDate date, LocalTime time) throws SQLException  {
+    public StatementBuilder setTimestamp(LocalDate date, LocalTime time) throws SQLException {
         statement.setTimestamp(++counter, Timestamp.valueOf(LocalDateTime.of(date, time)));
-
-        return this;
-    }
-
-    public StatementBuilder setOrderExpression(String expression) {
-
 
         return this;
     }
@@ -181,7 +176,6 @@ public class StatementBuilder implements AutoCloseable {
     public int executeDelete() throws SQLException {
         return statement.executeUpdate();
     }
-
 
     @Override
     public void close() throws Exception {

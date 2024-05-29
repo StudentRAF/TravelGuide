@@ -3,6 +3,7 @@ package rs.raf.student.service;
 import jakarta.inject.Inject;
 import rs.raf.student.domain.Page;
 import rs.raf.student.domain.PageImplementation;
+import rs.raf.student.dto.user.UserCreateDto;
 import rs.raf.student.dto.user.UserGetDto;
 import rs.raf.student.mapper.UserMapper;
 import rs.raf.student.model.User;
@@ -32,6 +33,16 @@ public class UserService {
             return null;
 
         return mapper.mapDto(user, new UserRole(user.getRoleId(), "ADMIN"));
+    }
+
+    public UserGetDto create(UserCreateDto createDto) {
+        User user = repository.create(createDto)
+                              .orElse(null);
+
+        if (user == null)
+            return null;
+
+        return mapper.mapDto(user, new UserRole(user.getRoleId(), "ADMIN"))t;
     }
 
 }

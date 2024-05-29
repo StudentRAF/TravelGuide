@@ -25,6 +25,10 @@ public class UserMapper {
             );
     }
 
+    public User map(UserCreateDto createDto) {
+        return map(new User(), createDto);
+    }
+
     public User map(User user, UserCreateDto createDto) {
         String salt = Utilities.generateSalt();
 
@@ -36,6 +40,10 @@ public class UserMapper {
         user.setRoleId(createDto.getUserRoleId());
 
         return user;
+    }
+
+    public User map(UserUpdateDto updateDto) {
+        return map(new User(), updateDto);
     }
 
     public User map(User user, UserUpdateDto updateDto) {
