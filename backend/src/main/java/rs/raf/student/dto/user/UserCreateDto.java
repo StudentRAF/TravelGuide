@@ -37,8 +37,8 @@ public class UserCreateDto {
     @Size(min = 8, message = "Password must contain at least 8 characters.")
     private String confirmPassword;
 
-    @JsonProperty("user_role_id")
+    @JsonProperty("role_id")
     @NotNull(message = "User role id cannot be null.")
-    private Long userRoleId;
+    private Long roleId;
 
 }

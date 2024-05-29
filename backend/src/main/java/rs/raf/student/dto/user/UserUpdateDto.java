@@ -30,8 +30,8 @@ public class UserUpdateDto {
     @Email(message = "Email does not have valid format.")
     private String email;
 
-    @JsonProperty("user_role_id")
-    private Long userRoleId;
+    @JsonProperty("role_id")
+    private Long roleId;
 
     private Boolean enabled;
 

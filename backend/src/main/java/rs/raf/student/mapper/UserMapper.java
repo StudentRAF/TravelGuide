@@ -37,7 +37,7 @@ public class UserMapper {
         user.setLastName(createDto.getLastName());
         user.setSalt(salt);
         user.setPassword(Utilities.hashPassword(createDto.getPassword(), salt));
-        user.setRoleId(createDto.getUserRoleId());
+        user.setRoleId(createDto.getRoleId());
 
         return user;
     }
@@ -50,7 +50,7 @@ public class UserMapper {
         user.setEmail(updateDto.getEmail());
         user.setFirstName(updateDto.getFirstName());
         user.setLastName(updateDto.getLastName());
-        user.setRoleId(updateDto.getUserRoleId());
+        user.setRoleId(updateDto.getRoleId());
         user.setEnabled(updateDto.getEnabled());
 
         return user;

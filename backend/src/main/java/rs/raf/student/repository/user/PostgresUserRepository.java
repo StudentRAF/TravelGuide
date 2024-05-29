@@ -27,12 +27,12 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
         List<User> users = new ArrayList<>();
         try(
             Connection connection       = createConnection();
-            StatementBuilder builder    = new StatementBuilder(connection,
-                                                               """
-                                                               select * from "user"
-                                                               """,
-                                                               0,
-                                                               pageSize);
+            StatementBuilder builder    = StatementBuilder.create(connection,
+                                                                  """
+                                                                  select * from "user"
+                                                                  """,
+                                                                  0,
+                                                                  pageSize);
             ResultSet resultSet         = builder.executeQuery()
         ) {
             if (resultSet.next())
@@ -54,13 +54,18 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
 
     @Override
     public Optional<User> findById(Long id) {
+        return findById(null, id);
+    }
+
+    private Optional<User> findById(Connection newConnection, Long id) {
+        Connection connection = newConnection == null ?  createConnection() : newConnection;
+
         try(
-            Connection connection       = createConnection();
-            StatementBuilder builder    = new StatementBuilder(connection,
-                                                               """
-                                                               select * from "user"
-                                                               where id = ?
-                                                               """);
+            StatementBuilder builder    = StatementBuilder.create(connection,
+                                                                  """
+                                                                  select * from "user"
+                                                                  where id = ?
+                                                                  """);
             ResultSet resultSet         = builder.setLong(id)
                                                  .executeQuery()
         ) {
@@ -85,11 +90,11 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
     public Optional<User> findByEmail(String email) {
         try(
             Connection connection       = createConnection();
-            StatementBuilder builder    = new StatementBuilder(connection,
-                                                               """
-                                                               select * from "user"
-                                                               where email like ?
-                                                               """);
+            StatementBuilder builder    = StatementBuilder.create(connection,
+                                                                  """
+                                                                  select * from "user"
+                                                                  where email like ?
+                                                                  """);
             ResultSet resultSet         = builder.setString(email)
                                                  .executeQuery()
         ) {
@@ -116,11 +121,11 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
 
         try(
             Connection connection    = createConnection();
-            StatementBuilder builder = new StatementBuilder(connection,
-                                                            """
-                                                            insert into "user"(first_name, last_name, email, salt, password, role_id)
-                                                            values (?, ?, ?, ?, ?, ?)
-                                                            """);
+            StatementBuilder builder = StatementBuilder.create(connection,
+                                                               """
+                                                               insert into "user"(first_name, last_name, email, salt, password, role_id)
+                                                               values (?, ?, ?, ?, ?, ?)
+                                                               """);
             ResultSet resultSet      = builder.setString(user.getFirstName())
                                               .setString(user.getLastName())
                                               .setString(user.getEmail())
@@ -138,9 +143,35 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
 
         return Optional.of(user);
     }
-
+///            StatementBuilder builder = StatementBuilder.create(connection,
+//                                                               """
+//                                                               update "user"
+//                                                               set first_name = ?, last_name = ?, email = ?, role_id = ?, enabled = ?
+//                                                               where id = ?
+//                                                               """);
+//            ResultSet resultSet      = builder.setString(updateDto.getFirstName())
+//                                              .setString(updateDto.getLastName())
+//                                              .setString(updateDto.getEmail())
+//                                              .setLong(updateDto.getRoleId())
+//                                              .setBoolean(updateDto.getEnabled())
+//                                              .executeInsert();
     @Override
     public Optional<User> update(UserUpdateDto updateDto) {
+        try(
+            Connection connection = createConnection();
+        ) {
+            User user = findById(connection, updateDto.getId())
+                .orElse(null);
+
+            if (user == null)
+                return Optional.empty();
+
+
+        }
+        catch (Exception exception) {
+            exception.printStackTrace(System.err);
+        }
+
         return Optional.empty();
     }
 

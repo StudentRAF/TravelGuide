@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -13,21 +14,15 @@ import java.time.LocalTime;
 
 public class StatementBuilder implements AutoCloseable {
 
+    private final Connection        connection;
     private final PreparedStatement statement;
+    private       Statement         returningStatement;
 
     private       int counter;
     private final int limit;
     private final int offset;
 
-    public StatementBuilder(Connection connection, String sql) throws SQLException {
-        this(connection, sql, 0);
-    }
-
-    public StatementBuilder(Connection connection, String sql, int pageSize) throws SQLException {
-        this(connection, sql, 0, pageSize);
-    }
-
-    public StatementBuilder(Connection connection, String sql, int page, int pageSize) throws SQLException {
+        private StatementBuilder(Connection connection, String sql, int page, int pageSize) throws SQLException {
         if (connection == null)
             throw new IllegalArgumentException("Database connection cannot be null!");
 
@@ -42,6 +37,8 @@ public class StatementBuilder implements AutoCloseable {
 
         StringBuilder sqlStatement = new StringBuilder(sql);
 
+        this.connection = connection;
+
         counter = 0;
         limit   = pageSize;
         offset  = page * pageSize;
@@ -51,12 +48,24 @@ public class StatementBuilder implements AutoCloseable {
 
         if (pageSize > 0)
             sqlStatement.append("""
-                            limit ?
-                            offset ?
-                            """);
+                                limit ?
+                                offset ?
+                                """);
 
         statement = connection.prepareStatement(sqlStatement.toString(),
                                                 PreparedStatement.RETURN_GENERATED_KEYS);
+    }
+
+    public static StatementBuilder create(Connection connection, String sql) throws SQLException {
+        return create(connection, sql, 0);
+    }
+
+    public static StatementBuilder create(Connection connection, String sql, int pageSize) throws SQLException {
+        return create(connection, sql, 0, pageSize);
+    }
+
+    public static StatementBuilder create(Connection connection, String sql, int page, int pageSize) throws SQLException {
+        return new StatementBuilder(connection, sql, page, pageSize);
     }
 
     public StatementBuilder setNull(int sqlType) throws SQLException {
@@ -169,17 +178,40 @@ public class StatementBuilder implements AutoCloseable {
         return statement.getGeneratedKeys();
     }
 
+    public ResultSet executeInsertReturning(String sql) throws SQLException {
+        executeInsert();
+
+        returningStatement = connection.createStatement();
+
+        return returningStatement.executeQuery(sql);
+    }
+
     public int executeUpdate() throws SQLException {
         return statement.executeUpdate();
+    }
+
+    public ResultSet executeUpdateReturning(StatementBuilder builder) throws SQLException {
+        executeUpdate();
+
+        return builder.executeQuery();
     }
 
     public int executeDelete() throws SQLException {
         return statement.executeUpdate();
     }
 
+    public ResultSet executeDeleteReturning(StatementBuilder builder) throws SQLException {
+        executeDelete();
+
+        return builder.executeQuery();
+    }
+
     @Override
     public void close() throws Exception {
         statement.close();
+
+        if (returningStatement != null)
+            returningStatement.close();
     }
 
 }
