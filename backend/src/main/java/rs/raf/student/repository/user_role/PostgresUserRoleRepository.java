@@ -2,7 +2,6 @@ package rs.raf.student.repository.user_role;
 
 import rs.raf.student.domain.Page;
 import rs.raf.student.domain.StatementBuilder;
-import rs.raf.student.model.User;
 import rs.raf.student.model.UserRole;
 import rs.raf.student.repository.IUserRoleRepository;
 import rs.raf.student.repository.PostgresAbstractRepository;
