@@ -7,7 +7,6 @@ import rs.raf.student.dto.destination.DestinationUpdateDto;
 import rs.raf.student.model.Destination;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IDestinationRepository {
 
@@ -15,12 +14,12 @@ public interface IDestinationRepository {
 
     Page<Destination> findAll(Pageable pageable);
 
-    Optional<Destination> findById(Long id);
+    Destination findById(Long id);
 
-    Optional<Destination> create(DestinationCreateDto createDto);
+    Destination create(DestinationCreateDto createDto);
 
-    Optional<Destination> update(DestinationUpdateDto updateDto);
+    Destination update(DestinationUpdateDto updateDto);
 
-    Optional<Destination> delete(Long id);
+    void delete(Long id);
 
 }

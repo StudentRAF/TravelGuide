@@ -16,11 +16,19 @@ public class DestinationMapper {
             );
     }
 
+    public Destination map(DestinationCreateDto createDto) {
+        return map(new Destination(), createDto);
+    }
+
     public Destination map(Destination destination, DestinationCreateDto createDto) {
         destination.setName(createDto.getName());
         destination.setDescription(createDto.getDescription());
 
         return destination;
+    }
+
+    public Destination map(DestinationUpdateDto updateDto) {
+        return map(new Destination(), updateDto);
     }
 
     public Destination map(Destination destination, DestinationUpdateDto updateDto) {

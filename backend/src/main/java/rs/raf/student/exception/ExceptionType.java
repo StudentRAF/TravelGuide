@@ -16,14 +16,22 @@ public enum ExceptionType implements IException {
     REPOSITORY_COMMENT_SQL_EXCEPTION          ("""
                                                SQL exception inside Comment repository. Thrown message: "{0}".\
                                                """, Severity.ERROR, Status.INTERNAL_SERVER_ERROR),
-    REPOSITORY_DESTINATION_SQL_EXCEPTION      ("""
-                                               SQL exception inside Destination repository. Thrown message: "{0}".\
-                                               """, Severity.ERROR, Status.INTERNAL_SERVER_ERROR),
 
+    REPOSITORY_DESTINATION_SQL_EXCEPTION               ("""
+                                                        SQL exception inside Destination repository. Thrown message: "{0}".\
+                                                        """, Severity.ERROR, Status.INTERNAL_SERVER_ERROR),
+    REPOSITORY_DESTINATION_FIND_ID_NOT_FOUND           ("""
+                                                        Could not find destination with id: {0}.\
+                                                        """, Severity.WARNING, Status.BAD_REQUEST),
     REPOSITORY_DESTINATION_UPDATE_DESTINATION_NOT_FOUND("""
                                                         Could not update destination with id: {0}, id was not found. Destination data - id: {0}, name: "{1}".\
                                                         """, Severity.WARNING, Status.BAD_REQUEST),
-
+    REPOSITORY_DESTINATION_CREATE_NO_RESULT_SET        ("""
+                                                        No result set found after creating Destination with name: {0}. Destination data - name: {0}, description: "{1}".\
+                                                        """, Severity.WARNING, Status.BAD_REQUEST),
+    REPOSITORY_DESTINATION_UPDATE_NO_RESULT_SET        ("""
+                                                        No result set found after updating Destination with id: {0}. Destination data - id: {0}, name: "{1}".\
+                                                        """, Severity.WARNING, Status.BAD_REQUEST),
     REPOSITORY_DESTINATION_DELETE_DESTINATION_NOT_FOUND("""
                                                         Could not delete destination with id: {0}, id was not found.\
                                                         """, Severity.WARNING, Status.BAD_REQUEST),

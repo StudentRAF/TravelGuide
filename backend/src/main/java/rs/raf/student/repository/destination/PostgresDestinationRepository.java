@@ -1,46 +1,208 @@
 package rs.raf.student.repository.destination;
 
+import jakarta.inject.Inject;
 import rs.raf.student.domain.Page;
+import rs.raf.student.domain.PageImplementation;
 import rs.raf.student.domain.Pageable;
+import rs.raf.student.domain.StatementBuilder;
 import rs.raf.student.dto.destination.DestinationCreateDto;
 import rs.raf.student.dto.destination.DestinationUpdateDto;
+import rs.raf.student.exception.ExceptionType;
+import rs.raf.student.exception.TGException;
+import rs.raf.student.mapper.DestinationMapper;
 import rs.raf.student.model.Destination;
 import rs.raf.student.repository.IDestinationRepository;
 import rs.raf.student.repository.PostgresAbstractRepository;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class PostgresDestinationRepository extends PostgresAbstractRepository implements IDestinationRepository {
 
+    @Inject
+    private DestinationMapper mapper;
+
     @Override
     public List<Destination> findAll() {
-        return List.of();
+        List<Destination>destinations = new ArrayList<>();
+
+        try(
+            Connection       connection = createConnection();
+            StatementBuilder builder    = StatementBuilder.create(connection,
+                                                                  """
+                                                                  select *
+                                                                  from destination
+                                                                  """);
+            ResultSet resultSet         = builder.executeQuery()
+        ) {
+            while (resultSet.next())
+                destinations.add(loadDestination(resultSet));
+        }
+        catch (Exception exception) {
+            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception.getMessage());
+        }
+
+        return destinations;
     }
 
     @Override
     public Page<Destination> findAll(Pageable pageable) {
-        return null;
+        List<Destination>destinations = new ArrayList<>();
+
+        try(
+            Connection       connection = createConnection();
+            StatementBuilder builder    = StatementBuilder.create(connection,
+                                                                  """
+                                                                  select *
+                                                                  from destination
+                                                                  """,
+                                                                  pageable.getPageNumber(),
+                                                                  pageable.getPageSize());
+            ResultSet resultSet         = builder.executeQuery()
+        ) {
+            while (resultSet.next())
+                destinations.add(loadDestination(resultSet));
+        }
+        catch (Exception exception) {
+            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception.getMessage());
+        }
+
+        return PageImplementation.of(destinations, pageable.getPageSize());
     }
 
     @Override
-    public Optional<Destination> findById(Long id) {
-        return Optional.empty();
+    public Destination findById(Long id) {
+        try(
+            Connection       connection = createConnection();
+            StatementBuilder builder    = StatementBuilder.create(connection,
+                                                                  """
+                                                                  select *
+                                                                  from destination
+                                                                  where id = ?;
+                                                                  """);
+            ResultSet resultSet         = builder.setLong(id)
+                                                 .executeQuery()
+        ) {
+            if (resultSet.next())
+                return loadDestination(resultSet);
+        }
+        catch (Exception exception) {
+            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception.getMessage());
+        }
+
+        throw new TGException(ExceptionType.REPOSITORY_DESTINATION_FIND_ID_NOT_FOUND, id.toString());
     }
 
     @Override
-    public Optional<Destination> create(DestinationCreateDto createDto) {
-        return Optional.empty();
+    public Destination create(DestinationCreateDto createDto) {
+        Destination destination = mapper.map(createDto);
+
+        try(
+            Connection       connection = createConnection();
+            StatementBuilder builder    = StatementBuilder.create(connection,
+                                                                  """
+                                                                  insert into destination(name, description)
+                                                                  values (?, ?)
+                                                                  """);
+            ResultSet resultSet         = builder.setString(destination.getName())
+                                                 .setString(destination.getDescription())
+                                                 .executeInsert()
+        ) {
+            if (resultSet.next())
+                destination.setId(resultSet.getLong(1));
+        }
+        catch (Exception exception) {
+            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception.getMessage());
+        }
+
+        throw new TGException(ExceptionType.REPOSITORY_DESTINATION_CREATE_NO_RESULT_SET,
+                              createDto.getName(),
+                              createDto.getDescription());
     }
 
     @Override
-    public Optional<Destination> update(DestinationUpdateDto updateDto) {
-        return Optional.empty();
+    public Destination update(DestinationUpdateDto updateDto) {
+        Destination destination;
+
+        try {
+            destination = findById(updateDto.getId());
+        }
+        catch (TGException exception) {
+            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_UPDATE_DESTINATION_NOT_FOUND,
+                                  updateDto.getId().toString(),
+                                  updateDto.getName(),
+                                  updateDto.getDescription());
+        }
+
+        try(
+            Connection       connection = createConnection();
+            StatementBuilder builder = StatementBuilder.create(connection,
+                                                               """
+                                                               update destination
+                                                               set name = ?, description = ?
+                                                               where id = ?
+                                                               """);
+            ResultSet resultSet      = builder.setString(destination.getName())
+                                              .setString(destination.getDescription())
+                                              .setLong(destination.getId())
+                                              .executeInsertReturning(StatementBuilder.create(connection,"""
+                                                                                              select *
+                                                                                              from destination
+                                                                                              where id = ?
+                                                                                              """)
+                                                                                      .setLong(destination.getId()))
+        ) {
+            if (resultSet.next())
+                return loadDestination(resultSet);
+        }
+        catch (Exception exception) {
+            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception.getMessage());
+        }
+
+        throw new TGException(ExceptionType.REPOSITORY_DESTINATION_UPDATE_NO_RESULT_SET,
+                              updateDto.getId().toString(),
+                              updateDto.getName(),
+                              updateDto.getDescription());
     }
 
     @Override
-    public Optional<Destination> delete(Long id) {
-        return Optional.empty();
+    public void delete(Long id) {
+        Destination destination;
+
+        try {
+            destination = findById(id);
+        }
+        catch (TGException exception) {
+            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_DELETE_DESTINATION_NOT_FOUND,
+                                  id.toString());
+        }
+
+        try(
+            Connection       connection = createConnection();
+            StatementBuilder builder    = StatementBuilder.create(connection,
+                                                                  """
+                                                                  delete from destination
+                                                                  where id = ?
+                                                                  """)
+        ) {
+            builder.setString(destination.getName())
+                   .setString(destination.getDescription())
+                   .setLong(destination.getId())
+                   .executeDelete();
+        }
+        catch (Exception exception) {
+            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception.getMessage());
+        }
+
+    }
+
+    private Destination loadDestination(ResultSet resultSet) throws SQLException {
+        return new Destination(resultSet.getLong("id"),
+                               resultSet.getString("name"),
+                               resultSet.getString("description"));
     }
 
 }
