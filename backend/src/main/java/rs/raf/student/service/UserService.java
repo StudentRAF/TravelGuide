@@ -7,6 +7,7 @@ import rs.raf.student.domain.Pageable;
 import rs.raf.student.domain.PageableImplementation;
 import rs.raf.student.dto.user.UserCreateDto;
 import rs.raf.student.dto.user.UserGetDto;
+import rs.raf.student.dto.user.UserUpdateDto;
 import rs.raf.student.mapper.UserMapper;
 import rs.raf.student.model.User;
 import rs.raf.student.model.UserRole;
@@ -48,14 +49,18 @@ public class UserService {
     }
 
     public UserGetDto getById(Long id) {
-        User     user     = repository.findById(id);
-        UserRole userRole = userRoleRepository.findById(user.getRoleId());
-
-        return mapper.mapDto(user, userRole);
+        return mapUser(repository.findById(id));
     }
 
     public UserGetDto create(UserCreateDto createDto) {
-        User     user     = repository.create(createDto);
+        return mapUser(repository.create(createDto));
+    }
+
+    public UserGetDto update(UserUpdateDto updateDto) {
+        return mapUser(repository.update(updateDto));
+    }
+
+    private UserGetDto mapUser(User user) {
         UserRole userRole = userRoleRepository.findById(user.getRoleId());
 
         return mapper.mapDto(user, userRole);
