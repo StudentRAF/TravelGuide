@@ -8,9 +8,11 @@ import rs.raf.student.dto.destination.DestinationUpdateDto;
 import rs.raf.student.exception.ExceptionType;
 import rs.raf.student.exception.TGException;
 import rs.raf.student.mapper.DestinationMapper;
+import rs.raf.student.model.Article;
 import rs.raf.student.model.Destination;
 import rs.raf.student.repository.IDestinationRepository;
 import rs.raf.student.repository.PostgresAbstractRepository;
+import rs.raf.student.sql.PostgresType;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -92,6 +94,31 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
         }
 
         throw new TGException(ExceptionType.REPOSITORY_DESTINATION_FIND_ID_NOT_FOUND, id.toString());
+    }
+
+    @Override
+    public List<Destination> findByIds(List<Long> ids) {
+        List<Destination> destinations = new ArrayList<>();
+
+        try(
+            Connection       connection = createConnection();
+            StatementBuilder builder    = StatementBuilder.create(connection,
+                                                                  """
+                                                                  select *
+                                                                  from destination
+                                                                  where id = any(?)
+                                                                  """);
+            ResultSet resultSet         = builder.setArray(PostgresType.BIGINT, ids)
+                                                 .executeQuery()
+        ) {
+            while (resultSet.next())
+                destinations.add(loadDestination(resultSet));
+        }
+        catch (Exception exception) {
+            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception.getMessage());
+        }
+
+        return destinations;
     }
 
     @Override

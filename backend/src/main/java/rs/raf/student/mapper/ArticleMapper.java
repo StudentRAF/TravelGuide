@@ -31,14 +31,23 @@ public class ArticleMapper {
             );
     }
 
+    public Article map(ArticleCreateDto createDto) {
+        return map(new Article(), createDto);
+    }
+
     public Article map(Article article, ArticleCreateDto createDto) {
         article.setTitle(createDto.getTitle());
         article.setContent(createDto.getContent());
         article.setAuthorId(createDto.getAuthorId());
         article.setDestinationId(createDto.getDestinationId());
         article.setCreatedAt(LocalDate.now());
+        article.setVisits(0L);
 
         return article;
+    }
+
+    public Article map(ArticleUpdateDto updateDto) {
+        return map(new Article(), updateDto);
     }
 
     public Article map(Article article, ArticleUpdateDto updateDto) {

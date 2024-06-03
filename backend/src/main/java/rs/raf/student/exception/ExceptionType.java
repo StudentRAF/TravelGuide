@@ -17,9 +17,22 @@ public enum ExceptionType implements IException {
                                              No result set found after creating Activity with name: {0}. Activity data - name: "{0}".\
                                              """, Severity.WARNING, Status.BAD_REQUEST),
 
-    REPOSITORY_ARTICLE_SQL_EXCEPTION          ("""
-                                               SQL exception inside Article repository. Thrown message: "{0}".\
-                                               """, Severity.ERROR, Status.INTERNAL_SERVER_ERROR),
+    REPOSITORY_ARTICLE_SQL_EXCEPTION       ("""
+                                            SQL exception inside Article repository. Thrown message: "{0}".\
+                                            """, Severity.ERROR, Status.INTERNAL_SERVER_ERROR),
+    REPOSITORY_ARTICLE_FIND_ID_NOT_FOUND   ("""
+                                            Could not find article with id: {0}.\
+                                            """, Severity.WARNING, Status.BAD_REQUEST),
+    REPOSITORY_ARTICLE_UPDATE_ID_NOT_FOUND ("""
+                                            Could not update article with id: {0}, id was not found. Article data - id: {0}, title: "{1}".\
+                                            """, Severity.WARNING, Status.BAD_REQUEST),
+    REPOSITORY_ARTICLE_CREATE_NO_RESULT_SET("""
+                                            No result set found after creating Article with title: {0}. Article data - title: "{0}", author_id: {2}, destination_id: {3}.\
+                                            """, Severity.WARNING, Status.BAD_REQUEST),
+    REPOSITORY_ARTICLE_UPDATE_NO_RESULT_SET("""
+                                            No result set found after updating Article with id: {0}. Article data - id: {0}, title: "{1}".\
+                                            """, Severity.WARNING, Status.BAD_REQUEST),
+
     REPOSITORY_ARTICLE_ACTIVITY_SQL_EXCEPTION ("""
                                                SQL exception inside ArticleActivity repository. Thrown message: "{0}".\
                                                """, Severity.ERROR, Status.INTERNAL_SERVER_ERROR),

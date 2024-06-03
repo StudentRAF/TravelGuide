@@ -15,6 +15,8 @@ public interface IDestinationRepository {
 
     Destination findById(Long id);
 
+    List<Destination> findByIds(List<Long> ids);
+
     Destination create(DestinationCreateDto createDto);
 
     Destination update(DestinationUpdateDto updateDto);
