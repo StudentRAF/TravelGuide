@@ -139,7 +139,7 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                                               .setString(user.getSalt())
                                               .setString(user.getPassword())
                                               .setLong(user.getRoleId())
-                                              .executeInsert();
+                                              .executeInsert()
         ) {
             if (resultSet.next())
                 user.setId(resultSet.getLong(1));
@@ -183,7 +183,8 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                                               .setString(updateDto.getEmail())
                                               .setLong(updateDto.getRoleId())
                                               .setBoolean(updateDto.getEnabled())
-                                              .executeInsertReturning(StatementBuilder.create(connection,"""
+                                              .executeInsertReturning(StatementBuilder.create(connection,
+                                                                                              """
                                                                                               select *
                                                                                               from "user"
                                                                                               where id = ?
