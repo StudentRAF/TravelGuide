@@ -17,6 +17,7 @@
         <jwt.version>4.4.0</jwt.version>
         <postgres.version>42.7.3</postgres.version>
         <commons-codec.version>1.17.0</commons-codec.version>
+        <slf4j.version>2.23.1</slf4j.version>
     </properties>
 
     <dependencies>
@@ -70,6 +71,21 @@
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>${commons-codec.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
     </dependencies>
 
