@@ -3,6 +3,7 @@ package rs.raf.student.service;
 import jakarta.inject.Inject;
 import rs.raf.student.domain.Page;
 import rs.raf.student.domain.PageImplementation;
+import rs.raf.student.domain.Pageable;
 import rs.raf.student.domain.PageableImplementation;
 import rs.raf.student.dto.user.UserCreateDto;
 import rs.raf.student.dto.user.UserGetDto;
@@ -13,6 +14,7 @@ import rs.raf.student.repository.IUserRepository;
 import rs.raf.student.repository.IUserRoleRepository;
 import rs.raf.student.utils.Utilities;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -28,11 +30,10 @@ public class UserService {
     @Inject
     private IUserRoleRepository userRoleRepository;
 
-    public Page<UserGetDto> getAll() {
-        Page<User> page = repository.findAll(PageableImplementation.of(0, 10));
+    public Page<UserGetDto> getAll(Pageable pageable) {
+        List<User> page = repository.findAll(PageableImplementation.of(pageable.getPageNumber(), pageable.getPageSize()));
 
-        Map<Long, UserRole> userRoles = userRoleRepository.findByIds(page.getContent()
-                                                                         .stream()
+        Map<Long, UserRole> userRoles = userRoleRepository.findByIds(page.stream()
                                                                          .map(User::getRoleId)
                                                                          .distinct()
                                                                          .toList())
@@ -42,7 +43,8 @@ public class UserService {
         return PageImplementation.of(Utilities.createStream(page.iterator())
                                               .map(user -> mapper.mapDto(user, userRoles.get(user.getRoleId())))
                                               .toList(),
-                                     page.getPageSize());
+                                     pageable.getPageNumber(),
+                                     pageable.getPageSize());
     }
 
     public UserGetDto getById(Long id) {

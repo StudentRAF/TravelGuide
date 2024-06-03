@@ -1,6 +1,5 @@
 package rs.raf.student.repository;
 
-import rs.raf.student.domain.Page;
 import rs.raf.student.domain.Pageable;
 import rs.raf.student.dto.destination.DestinationCreateDto;
 import rs.raf.student.dto.destination.DestinationUpdateDto;
@@ -12,7 +11,7 @@ public interface IDestinationRepository {
 
     List<Destination> findAll();
 
-    Page<Destination> findAll(Pageable pageable);
+    List<Destination> findAll(Pageable pageable);
 
     Destination findById(Long id);
 

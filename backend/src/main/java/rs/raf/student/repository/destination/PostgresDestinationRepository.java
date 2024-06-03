@@ -1,8 +1,6 @@
 package rs.raf.student.repository.destination;
 
 import jakarta.inject.Inject;
-import rs.raf.student.domain.Page;
-import rs.raf.student.domain.PageImplementation;
 import rs.raf.student.domain.Pageable;
 import rs.raf.student.domain.StatementBuilder;
 import rs.raf.student.dto.destination.DestinationCreateDto;
@@ -49,7 +47,7 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
     }
 
     @Override
-    public Page<Destination> findAll(Pageable pageable) {
+    public List<Destination> findAll(Pageable pageable) {
         List<Destination>destinations = new ArrayList<>();
 
         try(
@@ -70,7 +68,7 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
             throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception.getMessage());
         }
 
-        return PageImplementation.of(destinations, pageable.getPageSize());
+        return destinations;
     }
 
     @Override

@@ -29,7 +29,6 @@ public class DestinationService {
 
     public Page<DestinationGetDto> getAll(Pageable pageable) {
         return PageImplementation.of(repository.findAll(pageable)
-                                               .getContent()
                                                .stream()
                                                .map(mapper::mapDto)
                                                .toList(),
@@ -52,6 +51,5 @@ public class DestinationService {
     public void delete(Long id) {
         repository.delete(id);
     }
-
 
 }

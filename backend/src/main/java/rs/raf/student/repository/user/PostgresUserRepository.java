@@ -1,8 +1,6 @@
 package rs.raf.student.repository.user;
 
 import jakarta.inject.Inject;
-import rs.raf.student.domain.Page;
-import rs.raf.student.domain.PageImplementation;
 import rs.raf.student.domain.Pageable;
 import rs.raf.student.domain.StatementBuilder;
 import rs.raf.student.dto.user.UserCreateDto;
@@ -27,7 +25,7 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
     private UserMapper userMapper;
 
     @Override
-    public Page<User> findAll(Pageable pageable) throws TGException {
+    public List<User> findAll(Pageable pageable) throws TGException {
         List<User> users = new ArrayList<>();
 
         try(
@@ -48,7 +46,7 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
             throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception.getMessage());
         }
 
-        return PageImplementation.of(users, pageable.getPageSize());
+        return users;
     }
 
     @Override
@@ -206,9 +204,6 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
     }
 
     private User loadUser(ResultSet resultSet) throws SQLException {
-        if (resultSet == null)
-            return null;
-
         return new User(resultSet.getLong("id"),
                         resultSet.getString("first_name"),
                         resultSet.getString("last_name"),
