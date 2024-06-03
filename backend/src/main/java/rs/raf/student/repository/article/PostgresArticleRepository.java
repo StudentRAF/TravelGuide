@@ -40,7 +40,7 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
             ResultSet resultSet         = builder.executeQuery()
         ) {
             while (resultSet.next())
-                articles.add(loadArticle(resultSet));
+                 articles.add(loadArticle(resultSet));
         }
         catch (Exception exception) {
             throw new TGException(ExceptionType.REPOSITORY_ARTICLE_SQL_EXCEPTION, exception.getMessage());

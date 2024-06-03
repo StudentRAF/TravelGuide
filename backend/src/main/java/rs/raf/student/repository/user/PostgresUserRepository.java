@@ -140,7 +140,7 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                                               .executeInsert()
         ) {
             if (resultSet.next())
-                user.setId(resultSet.getLong(1));
+                return user.setId(resultSet.getLong(1));
         }
         catch (Exception exception) {
             throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception.getMessage());

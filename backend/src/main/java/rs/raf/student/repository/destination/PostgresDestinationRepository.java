@@ -137,7 +137,7 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
                                                  .executeInsert()
         ) {
             if (resultSet.next())
-                destination.setId(resultSet.getLong(1));
+                return destination.setId(resultSet.getLong(1));
         }
         catch (Exception exception) {
             throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception.getMessage());
