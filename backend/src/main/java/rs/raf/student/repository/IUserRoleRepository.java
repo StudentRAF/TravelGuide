@@ -1,16 +1,18 @@
 package rs.raf.student.repository;
 
-import rs.raf.student.domain.Page;
+import rs.raf.student.exception.TGException;
 import rs.raf.student.model.UserRole;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface IUserRoleRepository {
 
-    Page<UserRole> findAll();
+    List<UserRole> findAll() throws TGException;
 
-    Optional<UserRole> findById(Long id);
+    List<UserRole> findByIds(List<Long> ids) throws TGException;
 
-    Optional<UserRole> findByName(String name);
+    UserRole findById(Long id) throws TGException;
+
+    UserRole findByName(String name) throws TGException;
 
 }
