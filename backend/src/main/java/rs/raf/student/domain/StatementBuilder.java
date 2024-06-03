@@ -1,5 +1,7 @@
 package rs.raf.student.domain;
 
+import rs.raf.student.sql.SQLType;
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -10,9 +12,11 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 public class StatementBuilder implements AutoCloseable {
 
+    private final Connection        connection;
     private final PreparedStatement statement;
 
     private       int counter;
@@ -49,6 +53,8 @@ public class StatementBuilder implements AutoCloseable {
 
         statement = connection.prepareStatement(sqlStatement.toString(),
                                                 PreparedStatement.RETURN_GENERATED_KEYS);
+
+        this.connection = connection;
     }
 
     public static StatementBuilder create(Connection connection, String sql) throws SQLException {
@@ -131,7 +137,6 @@ public class StatementBuilder implements AutoCloseable {
 
     public StatementBuilder setTime(Time time) throws SQLException  {
         statement.setTime(++counter, time);
-
         return this;
     }
 
@@ -155,6 +160,16 @@ public class StatementBuilder implements AutoCloseable {
 
     public StatementBuilder setTimestamp(LocalDate date, LocalTime time) throws SQLException {
         statement.setTimestamp(++counter, Timestamp.valueOf(LocalDateTime.of(date, time)));
+
+        return this;
+    }
+
+    public StatementBuilder setArray(SQLType type, List<?> elements) throws SQLException {
+        return setArray(type, elements.toArray());
+    }
+
+    public StatementBuilder setArray(SQLType type, Object[] elements) throws SQLException {
+        statement.setArray(++counter, connection.createArrayOf(type.getName(), elements));
 
         return this;
     }
