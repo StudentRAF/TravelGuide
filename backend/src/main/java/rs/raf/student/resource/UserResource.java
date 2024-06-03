@@ -9,10 +9,11 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
-import rs.raf.student.domain.Page;
+import jakarta.ws.rs.core.Response;
 import rs.raf.student.dto.user.UserCreateDto;
-import rs.raf.student.dto.user.UserGetDto;
 import rs.raf.student.service.UserService;
+
+import static jakarta.ws.rs.core.Response.Status;
 
 @Path("/users")
 public class UserResource {
@@ -22,22 +23,28 @@ public class UserResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Page<UserGetDto> getAll() {
-        return service.getAll();
+    public Response getAll() {
+        return Response.status(Status.OK)
+                       .entity(service.getAll())
+                       .build();
     }
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public UserGetDto getById(@PathParam("id") Long id) {
-        return service.getById(id);
+    public Response getById(@PathParam("id") Long id) {
+        return Response.status(Status.OK)
+                       .entity(service.getById(id))
+                       .build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public UserGetDto create(@Valid UserCreateDto createDto) {
-        return service.create(createDto);
+    public Response create(@Valid UserCreateDto createDto) {
+        return Response.status(Status.CREATED)
+                       .entity(service.create(createDto))
+                       .build();
     }
 
 }

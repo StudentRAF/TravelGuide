@@ -1,22 +1,26 @@
 package rs.raf.student.repository;
 
 import rs.raf.student.domain.Page;
+import rs.raf.student.domain.Pageable;
 import rs.raf.student.dto.user.UserCreateDto;
 import rs.raf.student.dto.user.UserUpdateDto;
+import rs.raf.student.exception.TGException;
 import rs.raf.student.model.User;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface IUserRepository {
 
-    Page<User> findAll(int page, int pageSize);
+    Page<User> findAll(Pageable pageable) throws TGException;
 
-    Optional<User> findById(Long id);
+    User findById(Long id) throws TGException;
 
-    Optional<User> findByEmail(String email);
+    List<User> findByIds(List<Long> ids) throws TGException;
 
-    Optional<User> create(UserCreateDto createDto);
+    User findByEmail(String email) throws TGException;
 
-    Optional<User> update(UserUpdateDto updateDto);
+    User create(UserCreateDto createDto) throws TGException;
+
+    User update(UserUpdateDto updateDto) throws TGException;
 
 }

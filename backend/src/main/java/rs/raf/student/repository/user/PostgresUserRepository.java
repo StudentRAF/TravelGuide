@@ -3,19 +3,23 @@ package rs.raf.student.repository.user;
 import jakarta.inject.Inject;
 import rs.raf.student.domain.Page;
 import rs.raf.student.domain.PageImplementation;
+import rs.raf.student.domain.Pageable;
 import rs.raf.student.domain.StatementBuilder;
 import rs.raf.student.dto.user.UserCreateDto;
 import rs.raf.student.dto.user.UserUpdateDto;
+import rs.raf.student.exception.ExceptionType;
+import rs.raf.student.exception.TGException;
 import rs.raf.student.mapper.UserMapper;
 import rs.raf.student.model.User;
 import rs.raf.student.repository.IUserRepository;
 import rs.raf.student.repository.PostgresAbstractRepository;
+import rs.raf.student.sql.PostgresType;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class PostgresUserRepository extends PostgresAbstractRepository implements IUserRepository {
 
@@ -23,95 +27,103 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
     private UserMapper userMapper;
 
     @Override
-    public Page<User> findAll(int page, int pageSize) {
+    public Page<User> findAll(Pageable pageable) throws TGException {
         List<User> users = new ArrayList<>();
+
         try(
             Connection connection       = createConnection();
             StatementBuilder builder    = StatementBuilder.create(connection,
                                                                   """
-                                                                  select * from "user"
+                                                                  select *
+                                                                  from "user"
                                                                   """,
-                                                                  0,
-                                                                  pageSize);
+                                                                  pageable.getPageNumber(),
+                                                                  pageable.getPageSize());
             ResultSet resultSet         = builder.executeQuery()
         ) {
-            if (resultSet.next())
-                users.add(new User(resultSet.getLong("id"),
-                                            resultSet.getString("first_name"),
-                                            resultSet.getString("last_name"),
-                                            resultSet.getString("email"),
-                                            resultSet.getString("salt"),
-                                            resultSet.getString("password"),
-                                            resultSet.getLong("role_id"),
-                                            resultSet.getBoolean("enabled")));
+            while (resultSet.next())
+                users.add(loadUser(resultSet));
         }
         catch (Exception exception) {
-            exception.printStackTrace(System.err);
+            throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception.getMessage());
         }
 
-        return PageImplementation.of(users, pageSize);
+        return PageImplementation.of(users, pageable.getPageSize());
     }
 
     @Override
-    public Optional<User> findById(Long id) {
+    public User findById(Long id) throws TGException {
         try(
             Connection       connection = createConnection();
             StatementBuilder builder    = StatementBuilder.create(connection,
                                                                   """
-                                                                  select * from "user"
-                                                                  where id = ?
+                                                                  select *
+                                                                  from "user"
+                                                                  where id = ?;
                                                                   """);
             ResultSet resultSet         = builder.setLong(id)
                                                  .executeQuery()
         ) {
             if (resultSet.next())
-                return Optional.of(new User(resultSet.getLong("id"),
-                                            resultSet.getString("first_name"),
-                                            resultSet.getString("last_name"),
-                                            resultSet.getString("email"),
-                                            resultSet.getString("salt"),
-                                            resultSet.getString("password"),
-                                            resultSet.getLong("role_id"),
-                                            resultSet.getBoolean("enabled")));
+                return loadUser(resultSet);
         }
         catch (Exception exception) {
-            exception.printStackTrace(System.err);
+            throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception.getMessage());
         }
 
-        return Optional.empty();
+        throw new TGException(ExceptionType.REPOSITORY_USER_FIND_ID_NOT_FOUND, id.toString());
     }
 
     @Override
-    public Optional<User> findByEmail(String email)  {
+    public List<User> findByIds(List<Long> ids) throws TGException {
+        List<User> users = new ArrayList<>();
+
+        try(
+            Connection       connection = createConnection();
+            StatementBuilder builder    = StatementBuilder.create(connection,
+                                                                  """
+                                                                  select *
+                                                                  from "user"
+                                                                  where id = any(?)
+                                                                  """);
+            ResultSet resultSet         = builder.setArray(PostgresType.BIGINT, ids)
+                                                 .executeQuery()
+        ) {
+            while (resultSet.next())
+                users.add(loadUser(resultSet));
+        }
+        catch (Exception exception) {
+            throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception.getMessage());
+        }
+
+        return users;
+    }
+
+    @Override
+    public User findByEmail(String email) throws TGException {
         try(
             Connection connection       = createConnection();
             StatementBuilder builder    = StatementBuilder.create(connection,
                                                                   """
-                                                                  select * from "user"
+                                                                  select *
+                                                                  from "user"
                                                                   where email like ?
                                                                   """);
             ResultSet resultSet         = builder.setString(email)
                                                  .executeQuery()
         ) {
             if (resultSet.next())
-                return Optional.of(new User(resultSet.getLong("id"),
-                                            resultSet.getString("first_name"),
-                                            resultSet.getString("last_name"),
-                                            resultSet.getString("email"),
-                                            resultSet.getString("salt"),
-                                            resultSet.getString("password"),
-                                            resultSet.getLong("role_id"),
-                                            resultSet.getBoolean("enabled")));
+                return loadUser(resultSet);
         }
         catch (Exception exception) {
-            exception.printStackTrace(System.err);
+            throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception.getMessage());
         }
 
-        return Optional.empty();
+        throw new TGException(ExceptionType.REPOSITORY_USER_FIND_EMAIL_NOT_FOUND, email);
     }
 
     @Override
-    public Optional<User> create(UserCreateDto createDto) {
+    public User create(UserCreateDto createDto) throws TGException {
         User user = userMapper.map(createDto);
 
         try(
@@ -133,19 +145,30 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                 user.setId(resultSet.getLong(1));
         }
         catch (Exception exception) {
-            exception.printStackTrace(System.err);
+            throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception.getMessage());
         }
 
-        return Optional.of(user);
+        throw new TGException(ExceptionType.REPOSITORY_USER_UPDATE_USER_NOT_FOUND,
+                              createDto.getEmail(),
+                              createDto.getFirstName(),
+                              createDto.getLastName(),
+                              createDto.getRoleId().toString());
     }
 
     @Override
-    public Optional<User> update(UserUpdateDto updateDto) {
-        User user = findById(updateDto.getId())
-            .orElse(null);
+    public User update(UserUpdateDto updateDto) throws TGException {
+        User user;
 
-        if (user == null)
-            return Optional.empty();
+        try {
+            user = findById(updateDto.getId());
+        }
+        catch (TGException exception) {
+            throw new TGException(ExceptionType.REPOSITORY_USER_UPDATE_USER_NOT_FOUND,
+                                  updateDto.getId().toString(),
+                                  updateDto.getFirstName(),
+                                  updateDto.getLastName(),
+                                  updateDto.getRoleId().toString());
+        }
 
         try(
             Connection connection = createConnection();
@@ -168,20 +191,31 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                                                                                       .setLong(user.getId()))
         ) {
             if (resultSet.next())
-                return Optional.of(new User(resultSet.getLong("id"),
-                                            resultSet.getString("first_name"),
-                                            resultSet.getString("last_name"),
-                                            resultSet.getString("email"),
-                                            resultSet.getString("salt"),
-                                            resultSet.getString("password"),
-                                            resultSet.getLong("role_id"),
-                                            resultSet.getBoolean("enabled")));
+                return loadUser(resultSet);
         }
         catch (Exception exception) {
-            exception.printStackTrace(System.err);
+            throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception.getMessage());
         }
 
-        return Optional.empty();
+        throw new TGException(ExceptionType.REPOSITORY_USER_UPDATE_NO_RESULT_SET,
+                              updateDto.getId().toString(),
+                              updateDto.getFirstName(),
+                              updateDto.getLastName(),
+                              updateDto.getRoleId().toString());
+    }
+
+    private User loadUser(ResultSet resultSet) throws SQLException {
+        if (resultSet == null)
+            return null;
+
+        return new User(resultSet.getLong("id"),
+                        resultSet.getString("first_name"),
+                        resultSet.getString("last_name"),
+                        resultSet.getString("email"),
+                        resultSet.getString("salt"),
+                        resultSet.getString("password"),
+                        resultSet.getLong("role_id"),
+                        resultSet.getBoolean("enabled"));
     }
 
 }
