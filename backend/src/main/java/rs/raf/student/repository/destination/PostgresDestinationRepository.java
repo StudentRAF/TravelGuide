@@ -8,7 +8,6 @@ import rs.raf.student.dto.destination.DestinationUpdateDto;
 import rs.raf.student.exception.ExceptionType;
 import rs.raf.student.exception.TGException;
 import rs.raf.student.mapper.DestinationMapper;
-import rs.raf.student.model.Article;
 import rs.raf.student.model.Destination;
 import rs.raf.student.repository.IDestinationRepository;
 import rs.raf.student.repository.PostgresAbstractRepository;
@@ -156,7 +155,7 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
             destination = findById(updateDto.getId());
         }
         catch (TGException exception) {
-            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_UPDATE_DESTINATION_NOT_FOUND,
+            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_UPDATE_ID_NOT_FOUND,
                                   updateDto.getId().toString(),
                                   updateDto.getName(),
                                   updateDto.getDescription());
@@ -201,7 +200,7 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
             destination = findById(id);
         }
         catch (TGException exception) {
-            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_DELETE_DESTINATION_NOT_FOUND,
+            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_DELETE_ID_NOT_FOUND,
                                   id.toString());
         }
 

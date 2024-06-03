@@ -4,6 +4,8 @@ import static jakarta.ws.rs.core.Response.Status;
 
 public enum ExceptionType implements IException {
 
+    //region Activity Repository
+
     REPOSITORY_ACTIVITY_SQL_EXCEPTION      ("""
                                             SQL exception inside Activity repository. Thrown message: "{0}".\
                                             """, Severity.ERROR, Status.INTERNAL_SERVER_ERROR),
@@ -16,6 +18,10 @@ public enum ExceptionType implements IException {
     REPOSITORY_ACTIVITY_CREATE_NO_RESULT_SET("""
                                              No result set found after creating Activity with name: {0}. Activity data - name: "{0}".\
                                              """, Severity.WARNING, Status.BAD_REQUEST),
+
+    //endregion Activity Repository
+
+    //region Article Repository
 
     REPOSITORY_ARTICLE_SQL_EXCEPTION       ("""
                                             SQL exception inside Article repository. Thrown message: "{0}".\
@@ -33,31 +39,48 @@ public enum ExceptionType implements IException {
                                             No result set found after updating Article with id: {0}. Article data - id: {0}, title: "{1}".\
                                             """, Severity.WARNING, Status.BAD_REQUEST),
 
+    //endregion Article Repository
+
+    //region Article Activity Repository
+
     REPOSITORY_ARTICLE_ACTIVITY_SQL_EXCEPTION ("""
                                                SQL exception inside ArticleActivity repository. Thrown message: "{0}".\
                                                """, Severity.ERROR, Status.INTERNAL_SERVER_ERROR),
+
+    //endregion Article Activity Repository
+
+    //region Comment Repository
+
     REPOSITORY_COMMENT_SQL_EXCEPTION          ("""
                                                SQL exception inside Comment repository. Thrown message: "{0}".\
                                                """, Severity.ERROR, Status.INTERNAL_SERVER_ERROR),
 
-    REPOSITORY_DESTINATION_SQL_EXCEPTION               ("""
-                                                        SQL exception inside Destination repository. Thrown message: "{0}".\
-                                                        """, Severity.ERROR, Status.INTERNAL_SERVER_ERROR),
-    REPOSITORY_DESTINATION_FIND_ID_NOT_FOUND           ("""
-                                                        Could not find destination with id: {0}.\
-                                                        """, Severity.WARNING, Status.BAD_REQUEST),
-    REPOSITORY_DESTINATION_UPDATE_DESTINATION_NOT_FOUND("""
-                                                        Could not update destination with id: {0}, id was not found. Destination data - id: {0}, name: "{1}".\
-                                                        """, Severity.WARNING, Status.BAD_REQUEST),
-    REPOSITORY_DESTINATION_CREATE_NO_RESULT_SET        ("""
-                                                        No result set found after creating Destination with name: {0}. Destination data - name: "{0}", description: "{1}".\
-                                                        """, Severity.WARNING, Status.BAD_REQUEST),
-    REPOSITORY_DESTINATION_UPDATE_NO_RESULT_SET        ("""
-                                                        No result set found after updating Destination with id: {0}. Destination data - id: {0}, name: "{1}".\
-                                                        """, Severity.WARNING, Status.BAD_REQUEST),
-    REPOSITORY_DESTINATION_DELETE_DESTINATION_NOT_FOUND("""
-                                                        Could not delete destination with id: {0}, id was not found.\
-                                                        """, Severity.WARNING, Status.BAD_REQUEST),
+    //endregion Comment Repository
+
+    //region Destination Repository
+
+    REPOSITORY_DESTINATION_SQL_EXCEPTION       ("""
+                                                SQL exception inside Destination repository. Thrown message: "{0}".\
+                                                """, Severity.ERROR, Status.INTERNAL_SERVER_ERROR),
+    REPOSITORY_DESTINATION_FIND_ID_NOT_FOUND   ("""
+                                                Could not find destination with id: {0}.\
+                                                """, Severity.WARNING, Status.BAD_REQUEST),
+    REPOSITORY_DESTINATION_UPDATE_ID_NOT_FOUND ("""
+                                                Could not update destination with id: {0}, id was not found. Destination data - id: {0}, name: "{1}".\
+                                                """, Severity.WARNING, Status.BAD_REQUEST),
+    REPOSITORY_DESTINATION_CREATE_NO_RESULT_SET("""
+                                                No result set found after creating Destination with name: {0}. Destination data - name: "{0}", description: "{1}".\
+                                                """, Severity.WARNING, Status.BAD_REQUEST),
+    REPOSITORY_DESTINATION_UPDATE_NO_RESULT_SET("""
+                                                No result set found after updating Destination with id: {0}. Destination data - id: {0}, name: "{1}".\
+                                                """, Severity.WARNING, Status.BAD_REQUEST),
+    REPOSITORY_DESTINATION_DELETE_ID_NOT_FOUND ("""
+                                                Could not delete destination with id: {0}, id was not found.\
+                                                """, Severity.WARNING, Status.BAD_REQUEST),
+
+    //endregion Destination Repository
+
+    //region User Repository
 
     REPOSITORY_USER_SQL_EXCEPTION        ("""
                                           SQL exception inside User repository. Thrown message: "{0}".\
@@ -78,6 +101,10 @@ public enum ExceptionType implements IException {
                                           Could not update user with id: {0}, id was not found. User data - id: {0}, first_name: "{1}", last_name: "{2}", role_id: "{3}".\
                                           """, Severity.WARNING, Status.BAD_REQUEST),
 
+    //endregion User Repository
+
+    //region User Role Repository
+
     REPOSITORY_USER_ROLE_SQL_EXCEPTION      ("""
                                              SQL exception inside UserRole repository. Thrown message: "{0}".\
                                              """, Severity.ERROR, Status.INTERNAL_SERVER_ERROR),
@@ -88,7 +115,7 @@ public enum ExceptionType implements IException {
                                              Could not find user role with name: {0}.\
                                              """, Severity.WARNING, Status.BAD_REQUEST);
 
-
+    //endregion User Role Repository
 
     private final String   pattern;
     private final Severity severity;
