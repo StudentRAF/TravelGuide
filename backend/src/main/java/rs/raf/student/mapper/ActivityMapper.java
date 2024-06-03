@@ -14,6 +14,10 @@ public class ActivityMapper {
             );
     }
 
+    public Activity map(ActivityCreateDto createDto) {
+        return map(new Activity(), createDto);
+    }
+
     public Activity map(Activity activity, ActivityCreateDto createDto) {
         activity.setName(createDto.getName());
 

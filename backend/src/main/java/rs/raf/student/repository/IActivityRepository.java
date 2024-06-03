@@ -4,18 +4,17 @@ import rs.raf.student.dto.activity.ActivityCreateDto;
 import rs.raf.student.model.Activity;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IActivityRepository {
 
     List<Activity> findAll();
 
+    Activity findById(Long id);
+
+    Activity findByName(String name);
+
     List<Activity> findByDestination(Long destinationId); //NOTE: for ?
 
-    Optional<Activity> findById(Long id);
-
-    Optional<Activity> findByName(String name);
-
-    Optional<Activity> create(ActivityCreateDto createDto);
+    Activity create(ActivityCreateDto createDto);
 
 }
