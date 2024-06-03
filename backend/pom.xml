@@ -13,7 +13,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jersey.version>3.1.6</jersey.version>
+        <jersey.version>3.1.7</jersey.version>
         <jwt.version>4.4.0</jwt.version>
         <postgres.version>42.7.3</postgres.version>
         <commons-codec.version>1.17.0</commons-codec.version>
