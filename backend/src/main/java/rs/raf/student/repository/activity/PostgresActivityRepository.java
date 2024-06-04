@@ -7,7 +7,6 @@ import rs.raf.student.exception.ExceptionType;
 import rs.raf.student.exception.TGException;
 import rs.raf.student.mapper.ActivityMapper;
 import rs.raf.student.model.Activity;
-import rs.raf.student.model.Destination;
 import rs.raf.student.repository.IActivityRepository;
 import rs.raf.student.repository.PostgresAbstractRepository;
 

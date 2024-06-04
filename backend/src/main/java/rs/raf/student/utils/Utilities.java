@@ -1,11 +1,9 @@
 package rs.raf.student.utils;
 
-import lombok.SneakyThrows;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.security.SecureRandom;
 import java.util.Iterator;
 import java.util.List;
