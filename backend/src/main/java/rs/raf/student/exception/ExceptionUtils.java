@@ -16,4 +16,16 @@ public class ExceptionUtils {
         }
     }
 
+    public static Response handleResponse(TGCallable callable, Response successfulResponse) {
+        try {
+            callable.call();
+
+            return successfulResponse;
+        }
+        catch (TGException exception) {
+            return Response.status(exception.getHttpStatus())
+                           .build();
+        }
+    }
+
 }
