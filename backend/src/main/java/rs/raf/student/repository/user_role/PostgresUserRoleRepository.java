@@ -1,6 +1,6 @@
 package rs.raf.student.repository.user_role;
 
-import rs.raf.student.domain.StatementBuilder;
+import rs.raf.student.sql.StatementBuilder;
 import rs.raf.student.exception.ExceptionType;
 import rs.raf.student.exception.TGException;
 import rs.raf.student.model.UserRole;

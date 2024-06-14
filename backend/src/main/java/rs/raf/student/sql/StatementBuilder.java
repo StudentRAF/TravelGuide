@@ -1,7 +1,8 @@
-package rs.raf.student.domain;
+package rs.raf.student.sql;
 
 import lombok.SneakyThrows;
-import rs.raf.student.sql.SQLType;
+import rs.raf.student.domain.Pageable;
+import rs.raf.student.domain.PageableImplementation;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -24,9 +25,11 @@ public class StatementBuilder implements AutoCloseable {
 
     private final List<SortRecord>        sortRecords;
     private final List<InjectorRecord<?>> injectorRecords;
-    private       int                     counter;
-    private final int                     limit;
-    private final int                     offset;
+
+    private int     counter;
+    private int     limit;
+    private int     offset;
+    private boolean hasPage;
 
     private StatementBuilder(Connection connection, String sql, Pageable pageable) {
         if (connection == null)
@@ -45,6 +48,7 @@ public class StatementBuilder implements AutoCloseable {
             throw new IllegalArgumentException("Page size number cannot be negative number!");
 
         counter         = 0;
+        hasPage         = true;
         limit           = pageSize;
         offset          = page * pageSize;
         injectorRecords = new ArrayList<>();
@@ -75,6 +79,29 @@ public class StatementBuilder implements AutoCloseable {
 
     private StatementBuilder addSortRecord(SortRecord record) {
         sortRecords.add(record);
+
+        return this;
+    }
+
+    public StatementBuilder prepareLimit(int value) {
+        if (hasPage)
+            offset = offset / limit * value;
+
+        limit = value;
+
+        return this;
+    }
+
+    public StatementBuilder prepareOffset(int value) {
+        offset  = value;
+        hasPage = false;
+
+        return this;
+    }
+
+    public StatementBuilder preparePage(int page) {
+        offset  = page * limit;
+        hasPage = true;
 
         return this;
     }
@@ -151,9 +178,18 @@ public class StatementBuilder implements AutoCloseable {
         return prepareArray(type, elements.toArray());
     }
 
+    public StatementBuilder prepareSort(String column) {
+        return prepareSort(column, Order.ASC);
+    }
+
     public StatementBuilder prepareSort(String column, Order order) {
         return addSortRecord(new SortRecord(column, order));
     }
+
+    public StatementBuilder prepareSort(String column, Order order, Nulls nulls) {
+        return addSortRecord(new SortRecord(column, order, nulls));
+    }
+
 
     //endregion Prepare Injectors
 
@@ -227,8 +263,11 @@ public class StatementBuilder implements AutoCloseable {
             sqlStatement.append("""
                                 order by \
                                 """);
-
-            sortRecords.forEach(sqlStatement::append); //NOTE add comma
+            sqlStatement.append(sortRecords.getFirst());
+            sortRecords.stream()
+                       .skip(1)
+                       .forEach(record -> sqlStatement.append(", ")
+                                                      .append(record));
 
             sqlStatement.append('\n');
         }
@@ -242,7 +281,7 @@ public class StatementBuilder implements AutoCloseable {
             this.prepareInteger(limit)
                 .prepareInteger(offset);
         }
-
+        System.out.println(this);
         prepareStatement();
 
         return statement.executeQuery();
@@ -295,6 +334,11 @@ public class StatementBuilder implements AutoCloseable {
         statement.close();
     }
 
+    @Override
+    public String toString() {
+        return sqlStatement.toString();
+    }
+
     @FunctionalInterface
     private interface FunctionalInjector<Type> {
 
@@ -302,11 +346,16 @@ public class StatementBuilder implements AutoCloseable {
 
     }
 
-    private record SortRecord(String column, Order order) {
+    private record SortRecord(String column, Order order, Nulls nulls) {
+
+        private SortRecord(String column, Order order) {
+            this(column, order, order.equals(Order.ASC) ? Nulls.LAST : Nulls.FIRST);
+        }
 
         @Override
         public String toString() {
-            return column + ' ' + order;
+            return (column + ' ' + order + ' ' + nulls.forOrder(order)).replace("  ", " ")
+                                                                       .trim();
         }
 
     }

@@ -2,7 +2,7 @@ package rs.raf.student.repository.destination;
 
 import jakarta.inject.Inject;
 import rs.raf.student.domain.Pageable;
-import rs.raf.student.domain.StatementBuilder;
+import rs.raf.student.sql.StatementBuilder;
 import rs.raf.student.dto.destination.DestinationCreateDto;
 import rs.raf.student.dto.destination.DestinationUpdateDto;
 import rs.raf.student.exception.ExceptionType;

@@ -1,7 +1,7 @@
 package rs.raf.student.repository.activity;
 
 import jakarta.inject.Inject;
-import rs.raf.student.domain.StatementBuilder;
+import rs.raf.student.sql.StatementBuilder;
 import rs.raf.student.dto.activity.ActivityCreateDto;
 import rs.raf.student.exception.ExceptionType;
 import rs.raf.student.exception.TGException;
