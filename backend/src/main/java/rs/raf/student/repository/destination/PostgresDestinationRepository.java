@@ -55,14 +55,21 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
             Connection       connection = createConnection();
             StatementBuilder builder    = StatementBuilder.create(connection,
                                                                   """
-                                                                  select *
+                                                                  select *, count(*) over() as count
                                                                   from destination
                                                                   """,
                                                                   pageable);
             ResultSet resultSet         = builder.executeQuery()
         ) {
-            while (resultSet.next())
+            do {
+                if (!resultSet.next())
+                    break;
+
                 destinations.add(loadDestination(resultSet));
+            } while (!resultSet.isLast());
+
+            if (resultSet.isLast())
+                pageable.setTotalElements(resultSet.getInt("count"));
         }
         catch (Exception exception) {
             throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception, exception.getMessage());

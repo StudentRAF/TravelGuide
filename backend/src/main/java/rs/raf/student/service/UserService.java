@@ -2,7 +2,6 @@ package rs.raf.student.service;
 
 import jakarta.inject.Inject;
 import rs.raf.student.domain.Page;
-import rs.raf.student.domain.PageImplementation;
 import rs.raf.student.domain.Pageable;
 import rs.raf.student.dto.user.UserCreateDto;
 import rs.raf.student.dto.user.UserGetDto;
@@ -40,11 +39,10 @@ public class UserService {
                                                             .stream()
                                                             .collect(Collectors.toMap(UserRole::getId, Function.identity()));
 
-        return PageImplementation.of(Utilities.createStream(page.iterator())
-                                              .map(user -> mapper.mapDto(user, userRoles.get(user.getRoleId())))
-                                              .toList(),
-                                     pageable.getPage(),
-                                     pageable.getPageSize());
+        return Page.of(Utilities.createStream(page.iterator())
+                                .map(user -> mapper.mapDto(user, userRoles.get(user.getRoleId())))
+                                .toList(),
+                       pageable);
     }
 
     public UserGetDto getById(Long id) {

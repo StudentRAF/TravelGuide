@@ -15,7 +15,13 @@ public class Pageable {
 
     private int pageSize;
 
+    private int totalElements;
+
     private final List<SortRecord> sortRecords;
+
+    public static Pageable empty() {
+        return of(0);
+    }
 
     public static Pageable of(int pageSize) {
         return of(0, pageSize, List.of());
@@ -30,6 +36,7 @@ public class Pageable {
             (
                 0,
                 pageSize,
+                0,
                 sort.stream()
                     .map(SortRecord::parse)
                     .toList()
@@ -41,6 +48,7 @@ public class Pageable {
             (
                 page,
                 pageSize,
+                0,
                 sort.stream()
                     .map(SortRecord::parse)
                     .toList()

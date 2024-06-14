@@ -2,7 +2,6 @@ package rs.raf.student.service;
 
 import jakarta.inject.Inject;
 import rs.raf.student.domain.Page;
-import rs.raf.student.domain.PageImplementation;
 import rs.raf.student.domain.Pageable;
 import rs.raf.student.dto.article.ArticleCreateDto;
 import rs.raf.student.dto.article.ArticleGetDto;
@@ -36,9 +35,8 @@ public class ArticleService {
     private IDestinationRepository destinationRepository;
 
     public Page<ArticleGetDto> getAll(Pageable pageable) {
-        return PageImplementation.of(mapArticles(repository.findAll(pageable)),
-                                     pageable.getPage(),
-                                     pageable.getPageSize());
+        return Page.of(mapArticles(repository.findAll(pageable)),
+                       pageable);
     }
 
     public ArticleGetDto getById(Long id) {
@@ -46,9 +44,8 @@ public class ArticleService {
     }
 
     public Page<ArticleGetDto> getByDestinationId(Long destinationId, Pageable pageable) {
-        return PageImplementation.of(mapArticles(repository.findByDestination(destinationId, pageable)),
-                                     pageable.getPage(),
-                                     pageable.getPageSize());
+        return Page.of(mapArticles(repository.findByDestination(destinationId, pageable)),
+                       pageable);
     }
 
     public ArticleGetDto create(ArticleCreateDto createDto) {

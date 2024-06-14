@@ -32,14 +32,21 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
             Connection connection       = createConnection();
             StatementBuilder builder    = StatementBuilder.create(connection,
                                                                   """
-                                                                  select *
+                                                                  select *, count(*) over() as count
                                                                   from "user"
                                                                   """,
                                                                   pageable);
             ResultSet resultSet         = builder.executeQuery()
         ) {
-            while (resultSet.next())
+            do {
+                if (!resultSet.next())
+                    break;
+
                 users.add(loadUser(resultSet));
+            } while (!resultSet.isLast());
+
+            if (resultSet.isLast())
+                pageable.setTotalElements(resultSet.getInt("count"));
         }
         catch (Exception exception) {
             throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception, exception.getMessage());

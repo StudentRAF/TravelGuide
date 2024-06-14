@@ -32,14 +32,21 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
             Connection       connection = createConnection();
             StatementBuilder builder    = StatementBuilder.create(connection,
                                                                   """
-                                                                  select *
+                                                                  select *, count(*) over() as count
                                                                   from article
                                                                   """,
                                                                   pageable);
             ResultSet resultSet         = builder.executeQuery()
         ) {
-            while (resultSet.next())
-                 articles.add(loadArticle(resultSet));
+            do {
+                if (!resultSet.next())
+                    break;
+
+                articles.add(loadArticle(resultSet));
+            } while (!resultSet.isLast());
+
+            if (resultSet.isLast())
+                pageable.setTotalElements(resultSet.getInt("count"));
         }
         catch (Exception exception) {
             throw new TGException(ExceptionType.REPOSITORY_ARTICLE_SQL_EXCEPTION, exception, exception.getMessage());
@@ -79,7 +86,7 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
             Connection       connection = createConnection();
             StatementBuilder builder    = StatementBuilder.create(connection,
                                                                   """
-                                                                  select *
+                                                                  select *, count(*) over() as count
                                                                   from article
                                                                   where id = any(?)
                                                                   """,
@@ -87,8 +94,15 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
             ResultSet resultSet         = builder.prepareArray(PostgresType.BIGINT, ids)
                                                  .executeQuery()
         ) {
-            while (resultSet.next())
+            do {
+                if (!resultSet.next())
+                    break;
+
                 articles.add(loadArticle(resultSet));
+            } while (!resultSet.isLast());
+
+            if (resultSet.isLast())
+                pageable.setTotalElements(resultSet.getInt("count"));
         }
         catch (Exception exception) {
             throw new TGException(ExceptionType.REPOSITORY_ARTICLE_SQL_EXCEPTION, exception, exception.getMessage());
@@ -105,7 +119,7 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
             Connection       connection = createConnection();
             StatementBuilder builder    = StatementBuilder.create(connection,
                                                                   """
-                                                                  select *
+                                                                  select *, count(*) over() as count
                                                                   from article
                                                                   where destination_id = ?;
                                                                   """,
@@ -113,8 +127,15 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
             ResultSet resultSet         = builder.prepareLong(destinationId)
                                                  .executeQuery()
         ) {
-            while (resultSet.next())
+            do {
+                if (!resultSet.next())
+                    break;
+
                 articles.add(loadArticle(resultSet));
+            } while (!resultSet.isLast());
+
+            if (resultSet.isLast())
+                pageable.setTotalElements(resultSet.getInt("count"));
         }
         catch (Exception exception) {
             throw new TGException(ExceptionType.REPOSITORY_ARTICLE_SQL_EXCEPTION, exception, exception.getMessage());

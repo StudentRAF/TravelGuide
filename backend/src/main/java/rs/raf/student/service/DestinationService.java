@@ -2,7 +2,6 @@ package rs.raf.student.service;
 
 import jakarta.inject.Inject;
 import rs.raf.student.domain.Page;
-import rs.raf.student.domain.PageImplementation;
 import rs.raf.student.domain.Pageable;
 import rs.raf.student.dto.destination.DestinationCreateDto;
 import rs.raf.student.dto.destination.DestinationGetDto;
@@ -28,12 +27,11 @@ public class DestinationService {
     }
 
     public Page<DestinationGetDto> getAll(Pageable pageable) {
-        return PageImplementation.of(repository.findAll(pageable)
-                                               .stream()
-                                               .map(mapper::mapDto)
-                                               .toList(),
-                                     pageable.getPage(),
-                                     pageable.getPageSize());
+        return Page.of(repository.findAll(pageable)
+                                 .stream()
+                                 .map(mapper::mapDto)
+                                 .toList(),
+                       pageable);
     }
 
     public DestinationGetDto getById(Long id) {

@@ -69,6 +69,20 @@ public class StatementBuilder implements AutoCloseable {
         return new StatementBuilder(connection, sql, pageable);
     }
 
+    //region Update Pageable
+
+    private String findTableName() {
+        int tableStart = sqlStatement.indexOf("from") + 5;
+        int tableEnd   = sqlStatement.indexOf(" ", tableStart);
+
+        if (tableEnd == -1)
+            tableEnd = sqlStatement.length();
+
+        return sqlStatement.substring(tableStart, tableEnd);
+    }
+
+    //endregion
+
     //region Prepare Injectors
 
     private StatementBuilder addInjectorRecord(InjectorRecord<?> injectorRecord) {
