@@ -1,13 +1,13 @@
 -- CAUTION: This will remove all the existing data from the tables
 
 -- Remove previous data and reset sequence for each table
-truncate table user_role        restart identity;
-truncate table "user"           restart identity;
-truncate table destination      restart identity;
-truncate table article          restart identity;
-truncate table activity         restart identity;
-truncate table article_activity restart identity;
-truncate table comment          restart identity;
+truncate table user_role        restart identity cascade;
+truncate table "user"           restart identity cascade;
+truncate table destination      restart identity cascade;
+truncate table article          restart identity cascade;
+truncate table activity         restart identity cascade;
+truncate table article_activity restart identity cascade;
+truncate table comment          restart identity cascade;
 
 insert into user_role
        (id, name    )
