@@ -51,13 +51,12 @@ create table article_activity(
 );
 
 create table comment(
-    id         bigserial primary key,
-    content    text      not null,
-    author_id  bigint    not null references "user"(id),
-    article_id bigint    not null references article(id),
-    created_at date      not null default now()
+    id           bigserial primary key,
+    content      text         not null,
+    display_name varchar(128) not null,
+    article_id   bigint       not null references article(id),
+    created_at   date         not null default now()
 );
-
 
 -- Constraint | Not Empty
 alter table user_role   add check (name       <> '');
