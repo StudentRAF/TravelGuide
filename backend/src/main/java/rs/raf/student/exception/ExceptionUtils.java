@@ -11,8 +11,7 @@ public class ExceptionUtils {
             return supplier.get();
         }
         catch (TGException exception) {
-            return Response.status(exception.getHttpStatus())
-                           .build();
+            return handleException(exception);
         }
     }
 
@@ -23,9 +22,18 @@ public class ExceptionUtils {
             return successfulResponse;
         }
         catch (TGException exception) {
-            return Response.status(exception.getHttpStatus())
-                           .build();
+            return handleException(exception);
         }
+    }
+
+    private static Response handleException(TGException exception) {
+        Exception thrownException = exception.getException();
+
+        if (thrownException != null)
+            thrownException.printStackTrace(System.err);
+
+        return Response.status(exception.getHttpStatus())
+                       .build();
     }
 
 }

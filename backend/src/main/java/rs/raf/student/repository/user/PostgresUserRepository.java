@@ -42,7 +42,7 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                 users.add(loadUser(resultSet));
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         return users;
@@ -65,7 +65,7 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                 return loadUser(resultSet);
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         throw new TGException(ExceptionType.REPOSITORY_USER_FIND_ID_NOT_FOUND, id.toString());
@@ -90,7 +90,7 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                 users.add(loadUser(resultSet));
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         return users;
@@ -113,7 +113,7 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                 return loadUser(resultSet);
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         throw new TGException(ExceptionType.REPOSITORY_USER_FIND_EMAIL_NOT_FOUND, email);
@@ -142,7 +142,7 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                 return user.setId(resultSet.getLong(1));
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         throw new TGException(ExceptionType.REPOSITORY_USER_UPDATE_USER_NOT_FOUND,
@@ -192,7 +192,7 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                 return loadUser(resultSet);
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         throw new TGException(ExceptionType.REPOSITORY_USER_UPDATE_NO_RESULT_SET,

@@ -41,7 +41,7 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
                 destinations.add(loadDestination(resultSet));
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         return destinations;
@@ -65,7 +65,7 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
                 destinations.add(loadDestination(resultSet));
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         return destinations;
@@ -88,7 +88,7 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
                 return loadDestination(resultSet);
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         throw new TGException(ExceptionType.REPOSITORY_DESTINATION_FIND_ID_NOT_FOUND, id.toString());
@@ -113,7 +113,7 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
                 destinations.add(loadDestination(resultSet));
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         return destinations;
@@ -138,7 +138,7 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
                 return destination.setId(resultSet.getLong(1));
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         throw new TGException(ExceptionType.REPOSITORY_DESTINATION_CREATE_NO_RESULT_SET,
@@ -182,7 +182,7 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
                 return loadDestination(resultSet);
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         throw new TGException(ExceptionType.REPOSITORY_DESTINATION_UPDATE_NO_RESULT_SET,
@@ -217,7 +217,7 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
                    .executeDelete();
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
     }

@@ -38,7 +38,7 @@ public class PostgresActivityRepository extends PostgresAbstractRepository imple
                 activities.add(loadActivity(resultSet));
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_ACTIVITY_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_ACTIVITY_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         return activities;
@@ -61,7 +61,7 @@ public class PostgresActivityRepository extends PostgresAbstractRepository imple
                 return loadActivity(resultSet);
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_ACTIVITY_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_ACTIVITY_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         throw new TGException(ExceptionType.REPOSITORY_ACTIVITY_FIND_ID_NOT_FOUND, id.toString());
@@ -84,7 +84,7 @@ public class PostgresActivityRepository extends PostgresAbstractRepository imple
                 return loadActivity(resultSet);
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_ACTIVITY_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_ACTIVITY_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         throw new TGException(ExceptionType.REPOSITORY_ACTIVITY_FIND_NAME_NOT_FOUND, name);
@@ -113,7 +113,7 @@ public class PostgresActivityRepository extends PostgresAbstractRepository imple
                 return activity.setId(resultSet.getLong(1));
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_ACTIVITY_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_ACTIVITY_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         throw new TGException(ExceptionType.REPOSITORY_ACTIVITY_CREATE_NO_RESULT_SET,

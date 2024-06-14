@@ -11,6 +11,8 @@ import static jakarta.ws.rs.core.Response.Status;
 @Getter
 public class TGException extends RuntimeException {
 
+    private final Exception exception;
+
     private static final Map<Severity, IExceptionLogger> loggerMap = Map.of(
             Severity.TRACE,       TGException::trace,
             Severity.DEBUG,       TGException::debug,
@@ -22,8 +24,14 @@ public class TGException extends RuntimeException {
     private final Status httpStatus;
 
     public TGException(IException exception, String... args) {
-        loggerMap.get(exception.severity()).log(MessageFormat.format(exception.pattern(), args));
-        httpStatus = exception.httpStatus();
+        this(exception, null, args);
+    }
+
+    public TGException(IException tgException, Exception exception, String... args) {
+        this.exception = exception;
+
+        loggerMap.get(tgException.severity()).log(MessageFormat.format(tgException.pattern(), args));
+        httpStatus = tgException.httpStatus();
     }
 
     private static Logger logger = null;

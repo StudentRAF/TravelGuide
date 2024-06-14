@@ -33,7 +33,7 @@ public class PostgresUserRoleRepository extends PostgresAbstractRepository imple
                 roles.add(loadRole(resultSet));
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_USER_ROLE_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_USER_ROLE_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         return roles;
@@ -58,7 +58,7 @@ public class PostgresUserRoleRepository extends PostgresAbstractRepository imple
                 roles.add(loadRole(resultSet));
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_USER_ROLE_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_USER_ROLE_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         return roles;
@@ -81,7 +81,7 @@ public class PostgresUserRoleRepository extends PostgresAbstractRepository imple
                 return loadRole(resultSet);
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_USER_ROLE_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_USER_ROLE_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         throw new TGException(ExceptionType.REPOSITORY_USER_ROLE_FIND_ID_NOT_FOUND, id.toString());
@@ -105,7 +105,7 @@ public class PostgresUserRoleRepository extends PostgresAbstractRepository imple
                     return loadRole(resultSet);
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_USER_ROLE_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_USER_ROLE_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         throw new TGException(ExceptionType.REPOSITORY_USER_ROLE_FIND_NAME_NOT_FOUND, name);

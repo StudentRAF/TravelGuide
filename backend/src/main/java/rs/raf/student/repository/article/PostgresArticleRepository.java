@@ -42,7 +42,7 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
                  articles.add(loadArticle(resultSet));
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_ARTICLE_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_ARTICLE_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         return articles;
@@ -65,7 +65,7 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
                 return loadArticle(resultSet);
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_ARTICLE_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_ARTICLE_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         throw new TGException(ExceptionType.REPOSITORY_ARTICLE_FIND_ID_NOT_FOUND, id.toString());
@@ -91,7 +91,7 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
                 articles.add(loadArticle(resultSet));
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_ARTICLE_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_ARTICLE_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         return articles;
@@ -117,7 +117,7 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
                 articles.add(loadArticle(resultSet));
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_ARTICLE_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_ARTICLE_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         return articles;
@@ -146,7 +146,7 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
                 return article.setId(resultSet.getLong(1));
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_ARTICLE_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_ARTICLE_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         throw new TGException(ExceptionType.REPOSITORY_ARTICLE_CREATE_NO_RESULT_SET,
@@ -193,7 +193,7 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
                 return loadArticle(resultSet);
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_ARTICLE_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_ARTICLE_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         throw new TGException(ExceptionType.REPOSITORY_ARTICLE_UPDATE_NO_RESULT_SET,
@@ -216,7 +216,7 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
                    .executeDelete();
         }
         catch (Exception exception) {
-            throw new TGException(ExceptionType.REPOSITORY_ARTICLE_SQL_EXCEPTION, exception.getMessage());
+            throw new TGException(ExceptionType.REPOSITORY_ARTICLE_SQL_EXCEPTION, exception, exception.getMessage());
         }
     }
 
