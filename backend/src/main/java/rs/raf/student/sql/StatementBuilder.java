@@ -284,7 +284,7 @@ public class StatementBuilder implements AutoCloseable {
             this.prepareInteger(limit)
                 .prepareInteger(offset);
         }
-        System.out.println(this);
+
         prepareStatement();
 
         return statement.executeQuery();

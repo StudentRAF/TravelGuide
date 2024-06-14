@@ -10,12 +10,12 @@ public enum Order {
     ASC    ("asc" , ""    ),
     DESC   ("desc", "desc");
 
-    private final String code;
     private final String keyword;
+    private final String code;
 
     public static Order parse(String string) {
         for (Order order : Order.values())
-            if (order.keyword.equals(string))
+            if (order.keyword.equalsIgnoreCase(string))
                 return order;
 
         return null;

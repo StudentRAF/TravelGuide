@@ -10,8 +10,8 @@ public enum Nulls {
     FIRST("nulls first", "nulls first"),
     LAST ("nulls last" , "nulls last" );
 
-    private final String code;
     private final String keyword;
+    private final String code;
 
     public String forOrder(Order order) {
         if (order.equals(Order.ASC)  && equals(LAST) ||
@@ -23,7 +23,7 @@ public enum Nulls {
 
     public static Nulls parse(String string) {
         for (Nulls nulls : Nulls.values())
-            if (nulls.keyword.equals(string))
+            if (nulls.keyword.equalsIgnoreCase(string))
                 return nulls;
 
         return null;
