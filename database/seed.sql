@@ -1,3 +1,14 @@
+-- CAUTION: This will remove all the existing data from the tables
+
+-- Remove previous data and reset sequence for each table
+truncate table user_role        restart identity;
+truncate table "user"           restart identity;
+truncate table destination      restart identity;
+truncate table article          restart identity;
+truncate table activity         restart identity;
+truncate table article_activity restart identity;
+truncate table comment          restart identity;
+
 insert into user_role
        (id, name    )
 values (1,  'Admin' ),
@@ -184,3 +195,12 @@ values (1,  'Neela M',       'Eduardo was our tour guide and i had such a fun ti
        (21, 'Tara',          'We had a great time with Amy, our guide. She was knowledgeable and interesting. I would recommend this tour snd skip the long line! It was very crowded!',                                                                                                                                                                                 8         ),
        (22, 'Anna W',        'Positano was a must see and the Amalfi coast was gorgeous. The day was VERY long but the experience was just as described. We did wish our group was a little bit smaller, we were with a full coach bus of 50 people. Pompeii was amazing but we moved very slowly which was a little annoying. But the history and views were amazing!', 8         ),
        (23, 'Soodeh N',      'Don’t book this tour! Stay away from them! I booked this tour 9 months before coming to Rome to make sure our spot was safe! We showed up at 8:50 for the tour that was supposed to start at 9am! At 8:50 am they told us our tour guide didn’t show up and cancelled our tour! We were left alone with no guide! Unbelievable!',          8         );
+
+-- Update Sequence for each table
+select setval('user_role_id_seq',        (select max(id) from user_role       ));
+select setval('user_id_seq',             (select max(id) from "user"          ));
+select setval('destination_id_seq',      (select max(id) from destination     ));
+select setval('activity_id_seq',         (select max(id) from activity        ));
+select setval('article_id_seq',          (select max(id) from article         ));
+select setval('article_activity_id_seq', (select max(id) from article_activity));
+select setval('comment_id_seq',          (select max(id) from comment         ));
