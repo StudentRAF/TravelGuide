@@ -17,7 +17,7 @@ public class Comment {
 
     private String content;
 
-    private Long authorId;
+    private String displayName;
 
     private Long articleId;
 

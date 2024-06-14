@@ -15,9 +15,9 @@ public class CommentCreateDto {
     @NotBlank(message = "Content cannot be empty or null.")
     private String content;
 
-    @JsonProperty("author_id")
-    @NotNull(message = "Author id cannot be null.")
-    private Long authorId;
+    @JsonProperty("display_name")
+    @NotBlank(message = "Display name cannot be empty or null.")
+    private String displayNane;
 
     @JsonProperty("article_id")
     @NotNull(message = "Article id cannot be null.")

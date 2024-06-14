@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import rs.raf.student.dto.user.UserGetDto;
 
 import java.time.LocalDate;
 
@@ -17,7 +16,8 @@ public class CommentGetDto {
 
     private String content;
 
-    private UserGetDto author;
+    @JsonProperty("display_name")
+    private String displayName;
 
     @JsonProperty("created_at")
     private LocalDate createdAt;
