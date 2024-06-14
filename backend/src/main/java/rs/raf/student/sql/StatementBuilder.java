@@ -1,6 +1,5 @@
 package rs.raf.student.sql;
 
-import lombok.SneakyThrows;
 import rs.raf.student.domain.Pageable;
 import rs.raf.student.domain.PageableImplementation;
 
@@ -337,36 +336,6 @@ public class StatementBuilder implements AutoCloseable {
     @Override
     public String toString() {
         return sqlStatement.toString();
-    }
-
-    @FunctionalInterface
-    private interface FunctionalInjector<Type> {
-
-        void inject(SQLType type, Type value) throws SQLException;
-
-    }
-
-    private record SortRecord(String column, Order order, Nulls nulls) {
-
-        private SortRecord(String column, Order order) {
-            this(column, order, order.equals(Order.ASC) ? Nulls.LAST : Nulls.FIRST);
-        }
-
-        @Override
-        public String toString() {
-            return (column + ' ' + order + ' ' + nulls.forOrder(order)).replace("  ", " ")
-                                                                       .trim();
-        }
-
-    }
-
-    private record InjectorRecord<Type>(SQLType type, Type value, FunctionalInjector<Type> injector) {
-
-        @SneakyThrows
-        private void perform() {
-            injector.inject(type, value);
-        }
-
     }
 
 }
