@@ -197,10 +197,10 @@ values (1,  'Neela M',       'Eduardo was our tour guide and i had such a fun ti
        (23, 'Soodeh N',      'Don’t book this tour! Stay away from them! I booked this tour 9 months before coming to Rome to make sure our spot was safe! We showed up at 8:50 for the tour that was supposed to start at 9am! At 8:50 am they told us our tour guide didn’t show up and cancelled our tour! We were left alone with no guide! Unbelievable!',          8         );
 
 -- Update Sequence for each table
-select setval('user_role_id_seq',        (select max(id) from user_role       ));
-select setval('user_id_seq',             (select max(id) from "user"          ));
-select setval('destination_id_seq',      (select max(id) from destination     ));
-select setval('activity_id_seq',         (select max(id) from activity        ));
-select setval('article_id_seq',          (select max(id) from article         ));
-select setval('article_activity_id_seq', (select max(id) from article_activity));
-select setval('comment_id_seq',          (select max(id) from comment         ));
+select setval('user_role_id_seq',        (select max(id) from user_role       )) as "User Role Sequence",
+       setval('user_id_seq',             (select max(id) from "user"          )) as "User Sequence",
+       setval('destination_id_seq',      (select max(id) from destination     )) as "Destination Sequence",
+       setval('activity_id_seq',         (select max(id) from activity        )) as "Activity Sequence",
+       setval('article_id_seq',          (select max(id) from article         )) as "Article Sequence",
+       setval('article_activity_id_seq', (select max(id) from article_activity)) as "ArticleActivity Sequence",
+       setval('comment_id_seq',          (select max(id) from comment         )) as "Comment Sequence";
