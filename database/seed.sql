@@ -100,3 +100,24 @@ values (1,  'Babylon Tours Paris',               'You’ve seen it in the movies
        (6,  'Moana Adventure Tours',             'Private excursions or shared tours, snorkeling activities, boat or jet ski rides, Lagoon fishing trips, unforgettable honeymoon vacation. We organize everything for your pleasure. Come and experience the bliss on the most beautiful island of the French Polynesia. Most experienced tour operator of Bora Bora since 1969, Moana Adventure Tours offers a wide range of options on the emerald lagoon. Mauruuru',                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               26,        2             ),
        (7,  'LivTours',                          'LivTours is a small family business that offers exclusive private and small-group tours (max 6 people guaranteed!). Our strength is customer care, and our goal is to create memories in Italy that will last a lifetime. We pride ourselves on providing travelers from all backgrounds with experiences they can fully see, taste, smell and feel. From an intimate and customized tour through the Vatican Museums to the thrill of being in the driver seat of a Ferrari, we go beyond the ordinary to treat our customers to the best that Italy has to offer! We "limit" our groups to 6 people to make sure each individual gets extraordinary care and attention, and our exclusive private tours for families and groups are top-rated worldwide. LivTours proudly offers outstanding itineraries throughout the entire country. Don''t Just visit Italy, Live it.',                                                                                                                                                                                                                                        50,        4             ),
        (8,  'City Wonders',                      'City Wonders Tours (formerly Dark Rome) offers special-access tours in Rome, the Vatican, Venice, Florence and Milan. We specialize in small, single language tours with Skip the Line Access at all major monuments and museums - making sure that you get the very best from every second of your vacation. As an Official Vatican Museums Partner, City Wonders offers No Wait Access at the Vatican Museums along with a number of exclusive and special-access tours. We also have special access to the Colosseum underground, third tier level and arena floor. As well as original walking tours, we offer a number of innovative day trips from Rome to Tuscany, Pompeii and Florence. In operation for over 10 years now, our focus on the little details, our excellent Customer Care team and our careful guide selection have made us one of the most popular tour operators in Rome - and we''re still growing!',                                                                                                                                                                                      11,        4             );
+
+insert into activity
+       (id, name)
+values (1,  'City Tours'                 ),
+       (2,  'Cultural Tours'             ),
+       (3,  'Historical & Heritage Tours'),
+       (4,  'Walking Tours'              ),
+       (5,  'Private Tours'              ),
+       (6,  'Bike Tours'                 ),
+       (7,  'Sightseeing Tours'          ),
+       (8,  'Day Trips'                  ),
+       (9,  'Food Tours'                 ),
+       (10, 'Scuba & Snorkelling'        ),
+       (11, 'Boat Tours'                 ),
+       (12, 'Dolphin & Whale Watching'   ),
+       (13, 'Shark Diving'               ),
+       (14, 'Eco Tours'                  ),
+       (15, 'Waterskiing & Jetskiing'    ),
+       (16, 'Fishing Charters & Tours'   ),
+       (17, 'Speed Boats Tours'          ),
+       (18, 'Night Tours'                );
