@@ -54,7 +54,7 @@ public class PostgresActivityRepository extends PostgresAbstractRepository imple
                                                                   from activity
                                                                   where id = ?;
                                                                   """);
-            ResultSet resultSet         = builder.setLong(id)
+            ResultSet resultSet         = builder.prepareLong(id)
                                                  .executeQuery()
         ) {
             if (resultSet.next())
@@ -77,7 +77,7 @@ public class PostgresActivityRepository extends PostgresAbstractRepository imple
                                                                   from activity
                                                                   where name like ?;
                                                                   """);
-            ResultSet resultSet         = builder.setString(name)
+            ResultSet resultSet         = builder.prepareString(name)
                                                  .executeQuery()
         ) {
             if (resultSet.next())
@@ -106,7 +106,7 @@ public class PostgresActivityRepository extends PostgresAbstractRepository imple
                                                                   insert into activity(name)
                                                                   values (?)
                                                                   """);
-            ResultSet resultSet         = builder.setString(activity.getName())
+            ResultSet resultSet         = builder.prepareString(activity.getName())
                                                  .executeInsert()
         ) {
             if (resultSet.next())

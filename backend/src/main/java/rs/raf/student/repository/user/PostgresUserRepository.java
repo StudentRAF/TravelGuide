@@ -1,7 +1,9 @@
 package rs.raf.student.repository.user;
 
 import jakarta.inject.Inject;
+import rs.raf.student.domain.Order;
 import rs.raf.student.domain.Pageable;
+import rs.raf.student.domain.PageableImplementation;
 import rs.raf.student.domain.StatementBuilder;
 import rs.raf.student.dto.user.UserCreateDto;
 import rs.raf.student.dto.user.UserUpdateDto;
@@ -35,8 +37,7 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                                                                   select *
                                                                   from "user"
                                                                   """,
-                                                                  pageable.getPageNumber(),
-                                                                  pageable.getPageSize());
+                                                                  pageable);
             ResultSet resultSet         = builder.executeQuery()
         ) {
             while (resultSet.next())
@@ -59,7 +60,7 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                                                                   from "user"
                                                                   where id = ?;
                                                                   """);
-            ResultSet resultSet         = builder.setLong(id)
+            ResultSet resultSet         = builder.prepareLong(id)
                                                  .executeQuery()
         ) {
             if (resultSet.next())
@@ -84,7 +85,7 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                                                                   from "user"
                                                                   where id = any(?)
                                                                   """);
-            ResultSet resultSet         = builder.setArray(PostgresType.BIGINT, ids)
+            ResultSet resultSet         = builder.prepareArray(PostgresType.BIGINT, ids)
                                                  .executeQuery()
         ) {
             while (resultSet.next())
@@ -107,7 +108,7 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                                                                   from "user"
                                                                   where email like ?
                                                                   """);
-            ResultSet resultSet         = builder.setString(email)
+            ResultSet resultSet         = builder.prepareString(email)
                                                  .executeQuery()
         ) {
             if (resultSet.next())
@@ -131,12 +132,12 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                                                                insert into "user"(first_name, last_name, email, salt, password, role_id)
                                                                values (?, ?, ?, ?, ?, ?)
                                                                """);
-            ResultSet resultSet      = builder.setString(user.getFirstName())
-                                              .setString(user.getLastName())
-                                              .setString(user.getEmail())
-                                              .setString(user.getSalt())
-                                              .setString(user.getPassword())
-                                              .setLong(user.getRoleId())
+            ResultSet resultSet      = builder.prepareString(user.getFirstName())
+                                              .prepareString(user.getLastName())
+                                              .prepareString(user.getEmail())
+                                              .prepareString(user.getSalt())
+                                              .prepareString(user.getPassword())
+                                              .prepareLong(user.getRoleId())
                                               .executeInsert()
         ) {
             if (resultSet.next())
@@ -176,18 +177,18 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                                                                set first_name = ?, last_name = ?, email = ?, role_id = ?, enabled = ?
                                                                where id = ?
                                                                """);
-            ResultSet resultSet      = builder.setString(updateDto.getFirstName())
-                                              .setString(updateDto.getLastName())
-                                              .setString(updateDto.getEmail())
-                                              .setLong(updateDto.getRoleId())
-                                              .setBoolean(updateDto.getEnabled())
+            ResultSet resultSet      = builder.prepareString(updateDto.getFirstName())
+                                              .prepareString(updateDto.getLastName())
+                                              .prepareString(updateDto.getEmail())
+                                              .prepareLong(updateDto.getRoleId())
+                                              .prepareBoolean(updateDto.getEnabled())
                                               .executeInsertReturning(StatementBuilder.create(connection,
                                                                                               """
                                                                                               select *
                                                                                               from "user"
                                                                                               where id = ?
                                                                                               """)
-                                                                                      .setLong(user.getId()))
+                                                                                      .prepareLong(user.getId()))
         ) {
             if (resultSet.next())
                 return loadUser(resultSet);

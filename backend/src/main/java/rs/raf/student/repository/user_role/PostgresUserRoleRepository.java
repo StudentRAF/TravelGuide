@@ -51,7 +51,7 @@ public class PostgresUserRoleRepository extends PostgresAbstractRepository imple
                                                                   from user_role
                                                                   where id = any(?)
                                                                   """);
-            ResultSet resultSet         = builder.setArray(PostgresType.BIGINT, ids)
+            ResultSet resultSet         = builder.prepareArray(PostgresType.BIGINT, ids)
                                                  .executeQuery()
         ) {
             while (resultSet.next())
@@ -74,7 +74,7 @@ public class PostgresUserRoleRepository extends PostgresAbstractRepository imple
                                                                   from user_role
                                                                   where id = ?
                                                                   """);
-            ResultSet resultSet         = builder.setLong(id)
+            ResultSet resultSet         = builder.prepareLong(id)
                                                  .executeQuery()
         ) {
             if (resultSet.next())
@@ -97,7 +97,7 @@ public class PostgresUserRoleRepository extends PostgresAbstractRepository imple
                                                                   from user_role
                                                                   where name like ?
                                                                   """);
-            ResultSet resultSet         = builder.setString(name)
+            ResultSet resultSet         = builder.prepareString(name)
                                                  .executeQuery()
         ) {
             if (resultSet.next())

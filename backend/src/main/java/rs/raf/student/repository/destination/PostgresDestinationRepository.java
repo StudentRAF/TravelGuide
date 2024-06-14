@@ -58,8 +58,7 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
                                                                   select *
                                                                   from destination
                                                                   """,
-                                                                  pageable.getPageNumber(),
-                                                                  pageable.getPageSize());
+                                                                  pageable);
             ResultSet resultSet         = builder.executeQuery()
         ) {
             while (resultSet.next())
@@ -82,7 +81,7 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
                                                                   from destination
                                                                   where id = ?;
                                                                   """);
-            ResultSet resultSet         = builder.setLong(id)
+            ResultSet resultSet         = builder.prepareLong(id)
                                                  .executeQuery()
         ) {
             if (resultSet.next())
@@ -107,7 +106,7 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
                                                                   from destination
                                                                   where id = any(?)
                                                                   """);
-            ResultSet resultSet         = builder.setArray(PostgresType.BIGINT, ids)
+            ResultSet resultSet         = builder.prepareArray(PostgresType.BIGINT, ids)
                                                  .executeQuery()
         ) {
             while (resultSet.next())
@@ -131,8 +130,8 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
                                                                   insert into destination(name, description)
                                                                   values (?, ?)
                                                                   """);
-            ResultSet resultSet         = builder.setString(destination.getName())
-                                                 .setString(destination.getDescription())
+            ResultSet resultSet         = builder.prepareString(destination.getName())
+                                                 .prepareString(destination.getDescription())
                                                  .executeInsert()
         ) {
             if (resultSet.next())
@@ -169,15 +168,15 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
                                                                set name = ?, description = ?
                                                                where id = ?
                                                                """);
-            ResultSet resultSet      = builder.setString(destination.getName())
-                                              .setString(destination.getDescription())
-                                              .setLong(destination.getId())
+            ResultSet resultSet      = builder.prepareString(destination.getName())
+                                              .prepareString(destination.getDescription())
+                                              .prepareLong(destination.getId())
                                               .executeInsertReturning(StatementBuilder.create(connection,"""
                                                                                               select *
                                                                                               from destination
                                                                                               where id = ?
                                                                                               """)
-                                                                                      .setLong(destination.getId()))
+                                                                                      .prepareLong(destination.getId()))
         ) {
             if (resultSet.next())
                 return loadDestination(resultSet);
@@ -212,9 +211,9 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
                                                                   where id = ?
                                                                   """)
         ) {
-            builder.setString(destination.getName())
-                   .setString(destination.getDescription())
-                   .setLong(destination.getId())
+            builder.prepareString(destination.getName())
+                   .prepareString(destination.getDescription())
+                   .prepareLong(destination.getId())
                    .executeDelete();
         }
         catch (Exception exception) {

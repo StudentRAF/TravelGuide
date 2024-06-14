@@ -35,8 +35,7 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
                                                                   select *
                                                                   from article
                                                                   """,
-                                                                  pageable.getPageNumber(),
-                                                                  pageable.getPageSize());
+                                                                  pageable);
             ResultSet resultSet         = builder.executeQuery()
         ) {
             while (resultSet.next())
@@ -59,7 +58,7 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
                                                                   from article
                                                                   where id = ?;
                                                                   """);
-            ResultSet resultSet         = builder.setLong(id)
+            ResultSet resultSet         = builder.prepareLong(id)
                                                  .executeQuery()
         ) {
             if (resultSet.next())
@@ -84,9 +83,8 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
                                                                   from article
                                                                   where id = any(?)
                                                                   """,
-                                                                  pageable.getPageNumber(),
-                                                                  pageable.getPageSize());
-            ResultSet resultSet         = builder.setArray(PostgresType.BIGINT, ids)
+                                                                  pageable);
+            ResultSet resultSet         = builder.prepareArray(PostgresType.BIGINT, ids)
                                                  .executeQuery()
         ) {
             while (resultSet.next())
@@ -111,9 +109,8 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
                                                                   from article
                                                                   where destination_id = ?;
                                                                   """,
-                                                                  pageable.getPageNumber(),
-                                                                  pageable.getPageSize());
-            ResultSet resultSet         = builder.setLong(destinationId)
+                                                                  pageable);
+            ResultSet resultSet         = builder.prepareLong(destinationId)
                                                  .executeQuery()
         ) {
             while (resultSet.next())
@@ -137,12 +134,12 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
                                                                   insert into article(title, content, author_id, destination_id, created_at, visits)
                                                                   values (?, ?, ?, ?, ?, ?)
                                                                   """);
-            ResultSet resultSet         = builder.setString(article.getTitle())
-                                                 .setString(article.getContent())
-                                                 .setLong(article.getAuthorId())
-                                                 .setLong(article.getDestinationId())
-                                                 .setDate(article.getCreatedAt())
-                                                 .setLong(article.getVisits())
+            ResultSet resultSet         = builder.prepareString(article.getTitle())
+                                                 .prepareString(article.getContent())
+                                                 .prepareLong(article.getAuthorId())
+                                                 .prepareLong(article.getDestinationId())
+                                                 .prepareDate(article.getCreatedAt())
+                                                 .prepareLong(article.getVisits())
                                                  .executeInsert()
         ) {
             if (resultSet.next())
@@ -181,16 +178,16 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
                                                                set title = ?, content = ?
                                                                where id = ?
                                                                """);
-            ResultSet resultSet      = builder.setString(article.getTitle())
-                                              .setString(article.getContent())
-                                              .setLong(article.getId())
+            ResultSet resultSet      = builder.prepareString(article.getTitle())
+                                              .prepareString(article.getContent())
+                                              .prepareLong(article.getId())
                                               .executeInsertReturning(StatementBuilder.create(connection,
                                                                                               """
                                                                                               select *
                                                                                               from article
                                                                                               where id = ?
                                                                                               """)
-                                                                                      .setLong(article.getId()))
+                                                                                      .prepareLong(article.getId()))
         ) {
             if (resultSet.next())
                 return loadArticle(resultSet);
@@ -215,7 +212,7 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
                                                                   where id = ?
                                                                   """)
         ) {
-            builder.setLong(id)
+            builder.prepareLong(id)
                    .executeDelete();
         }
         catch (Exception exception) {
