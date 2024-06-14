@@ -102,7 +102,7 @@ values (1,  'Babylon Tours Paris',               'You’ve seen it in the movies
        (8,  'City Wonders',                      'City Wonders Tours (formerly Dark Rome) offers special-access tours in Rome, the Vatican, Venice, Florence and Milan. We specialize in small, single language tours with Skip the Line Access at all major monuments and museums - making sure that you get the very best from every second of your vacation. As an Official Vatican Museums Partner, City Wonders offers No Wait Access at the Vatican Museums along with a number of exclusive and special-access tours. We also have special access to the Colosseum underground, third tier level and arena floor. As well as original walking tours, we offer a number of innovative day trips from Rome to Tuscany, Pompeii and Florence. In operation for over 10 years now, our focus on the little details, our excellent Customer Care team and our careful guide selection have made us one of the most popular tour operators in Rome - and we''re still growing!',                                                                                                                                                                                      11,        4             );
 
 insert into activity
-       (id, name)
+       (id, name                         )
 values (1,  'City Tours'                 ),
        (2,  'Cultural Tours'             ),
        (3,  'Historical & Heritage Tours'),
