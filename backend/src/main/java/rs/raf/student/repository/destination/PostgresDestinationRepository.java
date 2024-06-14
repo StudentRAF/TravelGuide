@@ -2,7 +2,6 @@ package rs.raf.student.repository.destination;
 
 import jakarta.inject.Inject;
 import rs.raf.student.domain.Pageable;
-import rs.raf.student.sql.StatementBuilder;
 import rs.raf.student.dto.destination.DestinationCreateDto;
 import rs.raf.student.dto.destination.DestinationUpdateDto;
 import rs.raf.student.exception.ExceptionType;
@@ -12,6 +11,7 @@ import rs.raf.student.model.Destination;
 import rs.raf.student.repository.IDestinationRepository;
 import rs.raf.student.repository.PostgresAbstractRepository;
 import rs.raf.student.sql.PostgresType;
+import rs.raf.student.sql.StatementBuilder;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

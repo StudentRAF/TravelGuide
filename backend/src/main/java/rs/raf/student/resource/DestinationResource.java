@@ -13,11 +13,13 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import rs.raf.student.domain.PageableImplementation;
+import rs.raf.student.domain.Pageable;
 import rs.raf.student.dto.destination.DestinationCreateDto;
 import rs.raf.student.dto.destination.DestinationUpdateDto;
 import rs.raf.student.exception.ExceptionUtils;
 import rs.raf.student.service.DestinationService;
+
+import java.util.List;
 
 import static jakarta.ws.rs.core.Response.Status;
 
@@ -29,9 +31,9 @@ public class DestinationResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAll(@QueryParam("page") int page, @QueryParam("size") int size) {
+    public Response getAll(@QueryParam("page") int page, @QueryParam("size") int size, @QueryParam("sort") List<String> sort) {
         return ExceptionUtils.handleResponse(() -> Response.status(Status.OK)
-                                                           .entity(service.getAll(PageableImplementation.of(page, size)))
+                                                           .entity(service.getAll(Pageable.of(page, size, sort)))
                                                            .build());
     }
 

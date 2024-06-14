@@ -2,10 +2,6 @@ package rs.raf.student.repository.user;
 
 import jakarta.inject.Inject;
 import rs.raf.student.domain.Pageable;
-import rs.raf.student.domain.PageableImplementation;
-import rs.raf.student.sql.Nulls;
-import rs.raf.student.sql.Order;
-import rs.raf.student.sql.StatementBuilder;
 import rs.raf.student.dto.user.UserCreateDto;
 import rs.raf.student.dto.user.UserUpdateDto;
 import rs.raf.student.exception.ExceptionType;
@@ -15,6 +11,7 @@ import rs.raf.student.model.User;
 import rs.raf.student.repository.IUserRepository;
 import rs.raf.student.repository.PostgresAbstractRepository;
 import rs.raf.student.sql.PostgresType;
+import rs.raf.student.sql.StatementBuilder;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -29,7 +26,6 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
 
     @Override
     public List<User> findAll(Pageable pageable) throws TGException {
-        pageable = PageableImplementation.of(1, 10);
         List<User> users = new ArrayList<>();
 
         try(
@@ -40,10 +36,7 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                                                                   from "user"
                                                                   """,
                                                                   pageable);
-            ResultSet resultSet         = builder.prepareSort("first_name")
-                                                 .prepareSort("last_name", Order.ASC)
-                                                 .prepareSort("email", Order.DESC, Nulls.LAST)
-                                                 .executeQuery()
+            ResultSet resultSet         = builder.executeQuery()
         ) {
             while (resultSet.next())
                 users.add(loadUser(resultSet));

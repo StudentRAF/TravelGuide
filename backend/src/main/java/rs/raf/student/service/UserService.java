@@ -4,7 +4,6 @@ import jakarta.inject.Inject;
 import rs.raf.student.domain.Page;
 import rs.raf.student.domain.PageImplementation;
 import rs.raf.student.domain.Pageable;
-import rs.raf.student.domain.PageableImplementation;
 import rs.raf.student.dto.user.UserCreateDto;
 import rs.raf.student.dto.user.UserGetDto;
 import rs.raf.student.dto.user.UserUpdateDto;
@@ -32,7 +31,7 @@ public class UserService {
     private IUserRoleRepository userRoleRepository;
 
     public Page<UserGetDto> getAll(Pageable pageable) {
-        List<User> page = repository.findAll(PageableImplementation.of(pageable.getPageNumber(), pageable.getPageSize()));
+        List<User> page = repository.findAll(pageable);
 
         Map<Long, UserRole> userRoles = userRoleRepository.findByIds(page.stream()
                                                                          .map(User::getRoleId)
@@ -44,7 +43,7 @@ public class UserService {
         return PageImplementation.of(Utilities.createStream(page.iterator())
                                               .map(user -> mapper.mapDto(user, userRoles.get(user.getRoleId())))
                                               .toList(),
-                                     pageable.getPageNumber(),
+                                     pageable.getPage(),
                                      pageable.getPageSize());
     }
 

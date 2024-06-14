@@ -1,12 +1,12 @@
 package rs.raf.student.repository.user_role;
 
-import rs.raf.student.sql.StatementBuilder;
 import rs.raf.student.exception.ExceptionType;
 import rs.raf.student.exception.TGException;
 import rs.raf.student.model.UserRole;
 import rs.raf.student.repository.IUserRoleRepository;
 import rs.raf.student.repository.PostgresAbstractRepository;
 import rs.raf.student.sql.PostgresType;
+import rs.raf.student.sql.StatementBuilder;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

@@ -1,22 +1,24 @@
 package rs.raf.student.sql;
 
-import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@Getter(value = AccessLevel.PRIVATE)
+@Getter
+@AllArgsConstructor
 public enum Order {
 
-    ASC    (""    ),
-    DESC   ("desc");
+    ASC    ("asc" , ""    ),
+    DESC   ("desc", "desc");
 
     private final String code;
+    private final String keyword;
 
-    Order(String code) {
-        this.code = code;
-    }
+    public static Order parse(String string) {
+        for (Order order : Order.values())
+            if (order.keyword.equals(string))
+                return order;
 
-    Order(Order order) {
-        code = order.getCode();
+        return null;
     }
 
     @Override

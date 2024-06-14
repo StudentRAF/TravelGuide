@@ -32,7 +32,7 @@ public class DestinationService {
                                                .stream()
                                                .map(mapper::mapDto)
                                                .toList(),
-                                     pageable.getPageNumber(),
+                                     pageable.getPage(),
                                      pageable.getPageSize());
     }
 

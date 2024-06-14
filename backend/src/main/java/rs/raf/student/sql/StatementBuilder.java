@@ -1,7 +1,6 @@
 package rs.raf.student.sql;
 
 import rs.raf.student.domain.Pageable;
-import rs.raf.student.domain.PageableImplementation;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -37,7 +36,7 @@ public class StatementBuilder implements AutoCloseable {
         if (sql == null)
             throw new IllegalArgumentException("SQL statement cannot be null!");
 
-        int page     = pageable.getPageNumber();
+        int page     = pageable.getPage();
         int pageSize = pageable.getPageSize();
 
         if (page < 0)
@@ -57,11 +56,13 @@ public class StatementBuilder implements AutoCloseable {
         if (sqlStatement.charAt(sqlStatement.length() - 1) != '\n')
             sqlStatement.append('\n');
 
+        sortRecords.addAll(pageable.getSortRecords());
+
         this.connection = connection;
     }
 
     public static StatementBuilder create(Connection connection, String sql) throws SQLException {
-        return create(connection, sql, PageableImplementation.of(0, 0));
+        return create(connection, sql, Pageable.of(0, 0));
     }
 
     public static StatementBuilder create(Connection connection, String sql, Pageable pageable) throws SQLException {
@@ -185,10 +186,13 @@ public class StatementBuilder implements AutoCloseable {
         return addSortRecord(new SortRecord(column, order));
     }
 
+    public StatementBuilder prepareSort(String column, Nulls nulls) {
+        return addSortRecord(new SortRecord(column, nulls));
+    }
+
     public StatementBuilder prepareSort(String column, Order order, Nulls nulls) {
         return addSortRecord(new SortRecord(column, order, nulls));
     }
-
 
     //endregion Prepare Injectors
 

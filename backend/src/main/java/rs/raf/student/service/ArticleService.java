@@ -37,7 +37,7 @@ public class ArticleService {
 
     public Page<ArticleGetDto> getAll(Pageable pageable) {
         return PageImplementation.of(mapArticles(repository.findAll(pageable)),
-                                     pageable.getPageNumber(),
+                                     pageable.getPage(),
                                      pageable.getPageSize());
     }
 
@@ -47,7 +47,7 @@ public class ArticleService {
 
     public Page<ArticleGetDto> getByDestinationId(Long destinationId, Pageable pageable) {
         return PageImplementation.of(mapArticles(repository.findByDestination(destinationId, pageable)),
-                                     pageable.getPageNumber(),
+                                     pageable.getPage(),
                                      pageable.getPageSize());
     }
 

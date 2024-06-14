@@ -1,7 +1,6 @@
 package rs.raf.student.repository.activity;
 
 import jakarta.inject.Inject;
-import rs.raf.student.sql.StatementBuilder;
 import rs.raf.student.dto.activity.ActivityCreateDto;
 import rs.raf.student.exception.ExceptionType;
 import rs.raf.student.exception.TGException;
@@ -9,6 +8,7 @@ import rs.raf.student.mapper.ActivityMapper;
 import rs.raf.student.model.Activity;
 import rs.raf.student.repository.IActivityRepository;
 import rs.raf.student.repository.PostgresAbstractRepository;
+import rs.raf.student.sql.StatementBuilder;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
