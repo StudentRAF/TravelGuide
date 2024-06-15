@@ -110,31 +110,31 @@ public class StatementBuilder implements AutoCloseable {
         return addInjectorRecord(new InjectorRecord<>(SQLType.INTEGER, sqlType, this::injectNull));
     }
 
-    public StatementBuilder prepareBoolean(boolean value) {
+    public StatementBuilder prepareBoolean(Boolean value) {
         return addInjectorRecord(new InjectorRecord<>(SQLType.BOOLEAN, value, this::injectBoolean));
     }
 
-    public StatementBuilder prepareByte(byte value) {
+    public StatementBuilder prepareByte(Byte value) {
         return addInjectorRecord(new InjectorRecord<>(SQLType.INTEGER, value, this::injectByte));
     }
 
-    public StatementBuilder prepareShort(short value) {
+    public StatementBuilder prepareShort(Short value) {
         return addInjectorRecord(new InjectorRecord<>(SQLType.SMALLINT, value, this::injectShort));
     }
 
-    public StatementBuilder prepareInteger(int value) {
+    public StatementBuilder prepareInteger(Integer value) {
         return addInjectorRecord(new InjectorRecord<>(SQLType.INTEGER, value, this::injectInteger));
     }
 
-    public StatementBuilder prepareLong(long value) {
+    public StatementBuilder prepareLong(Long value) {
         return addInjectorRecord(new InjectorRecord<>(SQLType.INTEGER, value, this::injectLong));
     }
 
-    public StatementBuilder prepareFloat(float value) {
+    public StatementBuilder prepareFloat(Float value) {
         return addInjectorRecord(new InjectorRecord<>(SQLType.FLOAT, value, this::injectFloat));
     }
 
-    public StatementBuilder prepareDouble(double value) {
+    public StatementBuilder prepareDouble(Double value) {
         return addInjectorRecord(new InjectorRecord<>(SQLType.DOUBLE_PRECISION, value, this::injectDouble));
     }
 
