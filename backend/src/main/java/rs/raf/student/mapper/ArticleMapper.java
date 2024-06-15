@@ -4,11 +4,14 @@ import jakarta.inject.Inject;
 import rs.raf.student.dto.article.ArticleCreateDto;
 import rs.raf.student.dto.article.ArticleGetDto;
 import rs.raf.student.dto.article.ArticleUpdateDto;
+import rs.raf.student.model.Activity;
 import rs.raf.student.model.Article;
+import rs.raf.student.model.Comment;
 import rs.raf.student.model.Destination;
 import rs.raf.student.model.User;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class ArticleMapper {
 
@@ -18,7 +21,14 @@ public class ArticleMapper {
     @Inject
     private DestinationMapper destinationMapper;
 
-    public ArticleGetDto mapDto(Article article, User user,Destination destination) {
+    @Inject
+    private ActivityMapper activityMapper;
+
+    @Inject
+    private CommentMapper commentMapper;
+
+    public ArticleGetDto mapDto(Article article, User user, Destination destination, List<Activity> activities, List<Comment> comments) {
+
         return new ArticleGetDto
             (
                 article.getId(),
@@ -26,6 +36,12 @@ public class ArticleMapper {
                 article.getContent(),
                 userMapper.mapDto(user, null),
                 destinationMapper.mapDto(destination),
+                activities.stream()
+                          .map(activityMapper::mapDto)
+                          .toList(),
+                comments.stream()
+                        .map(commentMapper::mapDto)
+                        .toList(),
                 article.getCreatedAt(),
                 article.getVisits()
             );

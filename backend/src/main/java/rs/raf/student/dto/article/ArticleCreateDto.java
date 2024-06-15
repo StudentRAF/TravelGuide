@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArticleCreateDto {
+public class ArticleCreateDto { //todo add activities
 
     @NotBlank(message = "Title cannot be empty or null.")
     @Size(max = 256, message = "Title cannot have a length longer than 256 characters.")

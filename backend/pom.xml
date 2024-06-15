@@ -17,6 +17,7 @@
         <jwt.version>4.4.0</jwt.version>
         <postgres.version>42.7.3</postgres.version>
         <commons-codec.version>1.17.0</commons-codec.version>
+        <commons-lang>3.14.0</commons-lang>
         <slf4j.version>2.23.1</slf4j.version>
     </properties>
 
@@ -86,6 +87,11 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
             <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang}</version>
         </dependency>
     </dependencies>
 

@@ -43,18 +43,22 @@ public enum ExceptionType implements IException {
 
     //region Article Activity Repository
 
-    REPOSITORY_ARTICLE_ACTIVITY_SQL_EXCEPTION ("""
-                                               SQL exception inside ArticleActivity repository. Thrown message: "{0}".\
-                                               """, Severity.ERROR, Status.INTERNAL_SERVER_ERROR),
-
+    REPOSITORY_ARTICLE_ACTIVITY_SQL_EXCEPTION       ("""
+                                                     SQL exception inside ArticleActivity repository. Thrown message: "{0}".\
+                                                     """, Severity.ERROR, Status.INTERNAL_SERVER_ERROR),
+    REPOSITORY_ARTICLE_ACTIVITY_CREATE_NO_RESULT_SET("""
+                                                     No result set found after creating ArticleActivity. ArticleActivity data - articleId: "{0}", activityId: "{1}".\
+                                                     """, Severity.WARNING, Status.BAD_REQUEST),
     //endregion Article Activity Repository
 
     //region Comment Repository
 
-    REPOSITORY_COMMENT_SQL_EXCEPTION          ("""
-                                               SQL exception inside Comment repository. Thrown message: "{0}".\
-                                               """, Severity.ERROR, Status.INTERNAL_SERVER_ERROR),
-
+    REPOSITORY_COMMENT_SQL_EXCEPTION       ("""
+                                            SQL exception inside Comment repository. Thrown message: "{0}".\
+                                            """, Severity.ERROR, Status.INTERNAL_SERVER_ERROR),
+    REPOSITORY_COMMENT_CREATE_NO_RESULT_SET("""
+                                            No result set found after creating Comment. Comment data - displayName: "{1}", articleId: "{2}".\
+                                            """, Severity.WARNING, Status.BAD_REQUEST),
     //endregion Comment Repository
 
     //region Destination Repository

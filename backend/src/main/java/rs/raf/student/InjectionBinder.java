@@ -22,6 +22,8 @@ import rs.raf.student.repository.comment.PostgresCommentRepository;
 import rs.raf.student.repository.destination.PostgresDestinationRepository;
 import rs.raf.student.repository.user.PostgresUserRepository;
 import rs.raf.student.repository.user_role.PostgresUserRoleRepository;
+import rs.raf.student.service.ArticleService;
+import rs.raf.student.service.DestinationService;
 import rs.raf.student.service.UserService;
 
 public class InjectionBinder extends AbstractBinder {
@@ -36,6 +38,8 @@ public class InjectionBinder extends AbstractBinder {
         bind(PostgresUserRepository.class)           .to(IUserRepository.class)           .in(Singleton.class);
         bind(PostgresUserRoleRepository.class)       .to(IUserRoleRepository.class)       .in(Singleton.class);
 
+        bindAsContract(ArticleService.class);
+        bindAsContract(DestinationService.class);
         bindAsContract(UserService.class);
 
         bindAsContract(ActivityMapper.class);
