@@ -28,12 +28,12 @@ public class UserCreateDto {
     @Email(message = "Email does not have valid format.")
     private String email;
 
-    @NotNull(message = "Password cannot be null.")
+    @NotBlank(message = "Password cannot be empty or null.")
     @Size(min = 8, message = "Password must contain at least 8 characters.")
     private String password;
 
     @JsonProperty("confirm_password")
-    @NotNull(message = "Password cannot be null.")
+    @NotBlank(message = "Password cannot be empty or null.")
     @Size(min = 8, message = "Password must contain at least 8 characters.")
     private String confirmPassword;
 

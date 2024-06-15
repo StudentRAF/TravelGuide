@@ -58,7 +58,7 @@ public class PostgresCommentRepository extends PostgresAbstractRepository implem
                                                                   values (?, ?, ?)
                                                                   """);
             ResultSet resultSet         = builder.prepareString(createDto.getContent())
-                                                 .prepareString(createDto.getDisplayNane())
+                                                 .prepareString(createDto.getDisplayName())
                                                  .prepareLong(createDto.getArticleId())
                                                  .executeInsert()
         ) {
@@ -71,7 +71,7 @@ public class PostgresCommentRepository extends PostgresAbstractRepository implem
 
         throw new TGException(ExceptionType.REPOSITORY_COMMENT_CREATE_NO_RESULT_SET,
                               createDto.getContent(),
-                              createDto.getDisplayNane(),
+                              createDto.getDisplayName(),
                               createDto.getArticleId().toString());
     }
 

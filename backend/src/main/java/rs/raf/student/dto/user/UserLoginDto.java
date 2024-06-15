@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserLoginDto {
 
-    @NotNull(message = "Email cannot be null.")
+    @NotNull(message = "Email cannot be null or empty.")
     @Email(message = "Email does not have valid format.")
     private String email;
 

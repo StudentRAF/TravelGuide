@@ -29,7 +29,7 @@ public class CommentMapper {
 
     public Comment map(Comment comment, CommentCreateDto createDto) {
         comment.setContent(createDto.getContent());
-        comment.setDisplayName(createDto.getDisplayNane());
+        comment.setDisplayName(createDto.getDisplayName());
         comment.setArticleId(createDto.getArticleId());
         comment.setCreatedAt(LocalDate.now());
 
