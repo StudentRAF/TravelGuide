@@ -2,6 +2,7 @@ package rs.raf.student.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
@@ -10,10 +11,12 @@ import java.util.Optional;
 
 @Data
 @Accessors(chain = true)
-@AllArgsConstructor
+@EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserRole {
 
+    public static final UserRole ANYONE = new UserRole(0L, "Anyone");
     public static final UserRole ADMIN  = new UserRole(1L, "Admin");
     public static final UserRole EDITOR = new UserRole(2L, "Editor");
 

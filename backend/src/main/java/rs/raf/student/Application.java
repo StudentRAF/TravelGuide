@@ -5,7 +5,8 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 import org.slf4j.LoggerFactory;
 import rs.raf.student.exception.TGException;
-import rs.raf.student.resource.ResourceRoot;
+import rs.raf.student.filter.FilterPackageRoot;
+import rs.raf.student.resource.ResourcePackageRoot;
 
 @ApplicationPath("/api/v1")
 public class Application extends ResourceConfig {
@@ -15,7 +16,8 @@ public class Application extends ResourceConfig {
 
         register(new InjectionBinder());
 
-        packages(ResourceRoot.class.getPackageName());
+        packages(ResourcePackageRoot.class.getPackageName());
+        packages(FilterPackageRoot.class.getPackageName());
 
         TGException.setLogger(LoggerFactory.getLogger(Application.class));
     }

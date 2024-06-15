@@ -6,6 +6,20 @@ import java.util.function.Supplier;
 
 public class ExceptionUtils {
 
+    public static <Type> Type handleReturning(Supplier<Type> supplier) {
+        try {
+            return supplier.get();
+        }
+        catch (TGException exception) {
+            handleException(exception).close();
+
+            return null;
+        }
+        catch (Exception exception) {
+            return null;
+        }
+    }
+
     public static Response handleResponse(Supplier<Response> supplier) {
         try {
             return supplier.get();
