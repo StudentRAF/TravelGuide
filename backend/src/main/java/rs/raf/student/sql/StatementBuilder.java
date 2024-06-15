@@ -72,6 +72,10 @@ public class StatementBuilder implements AutoCloseable {
     //region Prepare Injectors
 
     private StatementBuilder addInjectorRecord(InjectorRecord<?> injectorRecord) {
+        if (injectorRecord.value() == null)
+            return prepareNull(injectorRecord.type().getCode());
+
+
         injectorRecords.add(injectorRecord);
 
         return this;
