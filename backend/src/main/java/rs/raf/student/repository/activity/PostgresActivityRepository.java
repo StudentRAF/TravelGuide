@@ -52,7 +52,7 @@ public class PostgresActivityRepository extends PostgresAbstractRepository imple
                                                                   """
                                                                   select *
                                                                   from activity
-                                                                  where id = ?;
+                                                                  where id = ?
                                                                   """);
             ResultSet resultSet         = builder.prepareLong(id)
                                                  .executeQuery()
@@ -75,7 +75,7 @@ public class PostgresActivityRepository extends PostgresAbstractRepository imple
                                                                   """
                                                                   select *
                                                                   from activity
-                                                                  where name like ?;
+                                                                  where name like ?
                                                                   """);
             ResultSet resultSet         = builder.prepareString(name)
                                                  .executeQuery()

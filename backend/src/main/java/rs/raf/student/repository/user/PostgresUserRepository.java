@@ -63,7 +63,7 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                                                                   """
                                                                   select *
                                                                   from "user"
-                                                                  where id = ?;
+                                                                  where id = ?
                                                                   """);
             ResultSet resultSet         = builder.prepareLong(id)
                                                  .executeQuery()

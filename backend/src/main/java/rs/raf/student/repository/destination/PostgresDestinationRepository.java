@@ -86,7 +86,7 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
                                                                   """
                                                                   select *
                                                                   from destination
-                                                                  where id = ?;
+                                                                  where id = ?
                                                                   """);
             ResultSet resultSet         = builder.prepareLong(id)
                                                  .executeQuery()

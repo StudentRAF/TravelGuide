@@ -63,7 +63,7 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
                                                                   """
                                                                   select *
                                                                   from article
-                                                                  where id = ?;
+                                                                  where id = ?
                                                                   """);
             ResultSet resultSet         = builder.prepareLong(id)
                                                  .executeQuery()
@@ -121,7 +121,7 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
                                                                   """
                                                                   select *, count(*) over() as count
                                                                   from article
-                                                                  where destination_id = ?;
+                                                                  where destination_id = ?
                                                                   """,
                                                                   pageable);
             ResultSet resultSet         = builder.prepareLong(destinationId)
