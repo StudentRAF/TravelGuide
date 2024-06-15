@@ -1,11 +1,11 @@
 package rs.raf.student.dto.article;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import rs.raf.student.validation.NullOrNotBlank;
 
 @Data
 @NoArgsConstructor
@@ -15,11 +15,11 @@ public class ArticleUpdateDto {
     @NotNull(message = "Article id cannot be null.")
     private Long id;
 
-    @NotBlank(message = "Title cannot be empty or null.")
+    @NullOrNotBlank(message = "Article title cannot be blank.")
     @Size(max = 256, message = "Title cannot have a length longer than 256 characters.")
     private String title;
 
-    @NotBlank(message = "Content cannot be empty or null.")
+    @NullOrNotBlank(message = "Article content cannot be blank.")
     private String content;
 
 }

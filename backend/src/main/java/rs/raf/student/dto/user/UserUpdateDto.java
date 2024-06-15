@@ -2,12 +2,12 @@ package rs.raf.student.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import rs.raf.student.validation.NullOrNotBlank;
 
 @Data
 @NoArgsConstructor
@@ -18,12 +18,12 @@ public class UserUpdateDto {
     private Long id;
 
     @JsonProperty("first_name")
-    @NotEmpty(message = "First name cannot be empty.")
+    @NullOrNotBlank(message = "Users first name cannot be blank.")
     @Size(max = 64, message = "First name cannot have a length longer than 64 characters.")
     private String firstName;
 
     @JsonProperty("last_name")
-    @NotEmpty(message = "Last name cannot be empty.")
+    @NullOrNotBlank(message = "Users last name cannot be blank.")
     @Size(max = 64, message = "Last name cannot have a length longer than 64 characters.")
     private String lastName;
 
