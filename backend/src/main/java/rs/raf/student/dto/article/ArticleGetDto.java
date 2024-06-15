@@ -1,9 +1,11 @@
 package rs.raf.student.dto.article;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import rs.raf.student.adapter.time.LocalDateSerializer;
 import rs.raf.student.dto.activity.ActivityGetDto;
 import rs.raf.student.dto.comment.CommentGetDto;
 import rs.raf.student.dto.destination.DestinationGetDto;
@@ -32,6 +34,7 @@ public class ArticleGetDto {
     private List<CommentGetDto> comments;
 
     @JsonProperty("created_at")
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate createdAt;
 
     private Long visits;

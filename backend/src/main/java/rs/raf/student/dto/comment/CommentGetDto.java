@@ -1,9 +1,11 @@
 package rs.raf.student.dto.comment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import rs.raf.student.adapter.time.LocalDateSerializer;
 
 import java.time.LocalDate;
 
@@ -20,6 +22,7 @@ public class CommentGetDto {
     private String displayName;
 
     @JsonProperty("created_at")
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate createdAt;
 
 }
