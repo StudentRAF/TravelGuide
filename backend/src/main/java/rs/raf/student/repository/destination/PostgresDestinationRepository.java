@@ -155,18 +155,6 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
 
     @Override
     public Destination update(DestinationUpdateDto updateDto) {
-        Destination destination;
-
-        try {
-            destination = findById(updateDto.getId());
-        }
-        catch (TGException exception) {
-            throw new TGException(ExceptionType.REPOSITORY_DESTINATION_UPDATE_ID_NOT_FOUND,
-                                  updateDto.getId().toString(),
-                                  updateDto.getName(),
-                                  updateDto.getDescription());
-        }
-
         try(
             Connection       connection = createConnection();
             StatementBuilder builder = StatementBuilder.create(connection,
@@ -175,15 +163,15 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
                                                                set name = ?, description = ?
                                                                where id = ?
                                                                """);
-            ResultSet resultSet      = builder.prepareString(destination.getName())
-                                              .prepareString(destination.getDescription())
-                                              .prepareLong(destination.getId())
+            ResultSet resultSet      = builder.prepareString(updateDto.getName())
+                                              .prepareString(updateDto.getDescription())
+                                              .prepareLong(updateDto.getId())
                                               .executeInsertReturning(StatementBuilder.create(connection,"""
                                                                                               select *
                                                                                               from destination
                                                                                               where id = ?
                                                                                               """)
-                                                                                      .prepareLong(destination.getId()))
+                                                                                      .prepareLong(updateDto.getId()))
         ) {
             if (resultSet.next())
                 return ResultSetReader.readDestination(resultSet);

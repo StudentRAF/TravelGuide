@@ -161,19 +161,6 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
 
     @Override
     public User update(UserUpdateDto updateDto) throws TGException {
-        User user;
-
-        try {
-            user = findById(updateDto.getId());
-        }
-        catch (TGException exception) {
-            throw new TGException(ExceptionType.REPOSITORY_USER_UPDATE_USER_NOT_FOUND,
-                                  updateDto.getId().toString(),
-                                  updateDto.getFirstName(),
-                                  updateDto.getLastName(),
-                                  updateDto.getRoleId().toString());
-        }
-
         try(
             Connection connection = createConnection();
             StatementBuilder builder = StatementBuilder.create(connection,
@@ -193,7 +180,7 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                                                                                               from "user"
                                                                                               where id = ?
                                                                                               """)
-                                                                                      .prepareLong(user.getId()))
+                                                                                      .prepareLong(updateDto.getId()))
         ) {
             if (resultSet.next())
                 return ResultSetReader.readUser(resultSet);

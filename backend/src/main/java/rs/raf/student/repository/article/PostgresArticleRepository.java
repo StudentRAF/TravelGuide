@@ -179,18 +179,6 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
 
     @Override
     public Article update(ArticleUpdateDto updateDto) {
-        Article article;
-
-        try {
-            article = findById(updateDto.getId());
-        }
-        catch (TGException exception) {
-            throw new TGException(ExceptionType.REPOSITORY_ARTICLE_UPDATE_ID_NOT_FOUND,
-                                  updateDto.getId().toString(),
-                                  updateDto.getTitle(),
-                                  updateDto.getContent());
-        }
-
         try(
             Connection       connection = createConnection();
             StatementBuilder builder = StatementBuilder.create(connection,
@@ -199,16 +187,16 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
                                                                set title = ?, content = ?
                                                                where id = ?
                                                                """);
-            ResultSet resultSet      = builder.prepareString(article.getTitle())
-                                              .prepareString(article.getContent())
-                                              .prepareLong(article.getId())
+            ResultSet resultSet      = builder.prepareString(updateDto.getTitle())
+                                              .prepareString(updateDto.getContent())
+                                              .prepareLong(updateDto.getId())
                                               .executeInsertReturning(StatementBuilder.create(connection,
                                                                                               """
                                                                                               select *
                                                                                               from article
                                                                                               where id = ?
                                                                                               """)
-                                                                                      .prepareLong(article.getId()))
+                                                                                      .prepareLong(updateDto.getId()))
         ) {
             if (resultSet.next())
                 return ResultSetReader.readArticle(resultSet);
