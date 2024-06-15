@@ -160,7 +160,7 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
             StatementBuilder builder = StatementBuilder.create(connection,
                                                                """
                                                                update destination
-                                                               set name = ?, description = ?
+                                                               set name = coalesce(?, name), description = coalesce(?, description)
                                                                where id = ?
                                                                """);
             ResultSet resultSet      = builder.prepareString(updateDto.getName())

@@ -166,7 +166,9 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
             StatementBuilder builder = StatementBuilder.create(connection,
                                                                """
                                                                update "user"
-                                                               set first_name = ?, last_name = ?, email = ?, role_id = ?, enabled = ?
+                                                               set first_name = coalesce(?, first_name), last_name = coalesce(?, last_name),
+                                                                   email      = coalesce(?, email),      role_id   = coalesce(?, role_id),
+                                                                   enabled    = coalesce(?, enabled)
                                                                where id = ?
                                                                """);
             ResultSet resultSet      = builder.prepareString(updateDto.getFirstName())
@@ -174,6 +176,7 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                                               .prepareString(updateDto.getEmail())
                                               .prepareLong(updateDto.getRoleId())
                                               .prepareBoolean(updateDto.getEnabled())
+                                              .prepareLong(updateDto.getId())
                                               .executeInsertReturning(StatementBuilder.create(connection,
                                                                                               """
                                                                                               select *

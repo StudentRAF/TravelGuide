@@ -184,7 +184,7 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
             StatementBuilder builder = StatementBuilder.create(connection,
                                                                """
                                                                update article
-                                                               set title = ?, content = ?
+                                                               set title = coalesce(?, title), content = coalesce(?, content)
                                                                where id = ?
                                                                """);
             ResultSet resultSet      = builder.prepareString(updateDto.getTitle())
