@@ -46,15 +46,16 @@ create table article(
 
 create table article_activity(
     id          bigserial primary key,
-    article_id  bigint not null references article(id),
+    article_id  bigint not null references article(id) on delete cascade,
     activity_id bigint not null references activity(id)
+
 );
 
 create table comment(
     id           bigserial primary key,
     content      text         not null,
     display_name varchar(128) not null,
-    article_id   bigint       not null references article(id),
+    article_id   bigint       not null references article(id) on delete cascade,
     created_at   date         not null default now()
 );
 
