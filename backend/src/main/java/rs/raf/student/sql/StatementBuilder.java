@@ -299,7 +299,6 @@ public class StatementBuilder implements AutoCloseable {
     }
 
     public ResultSet executeInsertReturning(StatementBuilder builder) throws SQLException {
-        prepareStatement();
         executeInsert();
 
         return builder.executeQuery();
@@ -312,7 +311,6 @@ public class StatementBuilder implements AutoCloseable {
     }
 
     public ResultSet executeUpdateReturning(StatementBuilder builder) throws SQLException {
-        prepareStatement();
         executeUpdate();
 
         return builder.executeQuery();
