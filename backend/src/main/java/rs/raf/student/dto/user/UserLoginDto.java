@@ -1,8 +1,8 @@
 package rs.raf.student.dto.user;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ public class UserLoginDto {
     @Email(message = "Email does not have valid format.")
     private String email;
 
-    @Size(min = 8, message = "password must contain at least 8 characters.")
+    @NotBlank(message = "Password cannot be empty or null.")
     private String password;
 
 }

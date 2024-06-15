@@ -5,11 +5,28 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+import java.util.Optional;
+
 @Data
 @Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRole {
+
+    public static final UserRole ADMIN  = new UserRole(1L, "Admin");
+    public static final UserRole EDITOR = new UserRole(2L, "Editor");
+
+    private static final List<UserRole> roles = List.of(
+        ADMIN,
+        EDITOR
+    );
+
+    public static Optional<UserRole> valueOf(String name) {
+        return roles.stream()
+                    .filter(role -> role.name.equalsIgnoreCase(name))
+                    .findFirst();
+    }
 
     private Long id;
 

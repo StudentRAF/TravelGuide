@@ -117,9 +117,22 @@ public enum ExceptionType implements IException {
                                              """, Severity.WARNING, Status.BAD_REQUEST),
     REPOSITORY_USER_ROLE_FIND_NAME_NOT_FOUND("""
                                              Could not find user role with name: {0}.\
-                                             """, Severity.WARNING, Status.BAD_REQUEST);
+                                             """, Severity.WARNING, Status.BAD_REQUEST),
 
     //endregion User Role Repository
+
+    //region User Service
+
+    SERVICE_USER_LOGIN_INVALID_EMAIL   ("""
+                                        Could not login in User with username: {0}, username not found. Login data - email:"{0}", password:"{1}".\
+                                        """, Severity.TRACE, Status.BAD_REQUEST),
+    SERVICE_USER_LOGIN_INVALID_PASSWORD("""
+                                        Could not login in User with username: {0}, password is not valid. Login data - email:"{0}", password:"{1}".\
+                                        """, Severity.TRACE, Status.BAD_REQUEST),
+    SERVICE_USER_DECODE_INVALID_TOKEN  ("""
+                                        Could not decode token: "{0}". Thrown message: "{1}".\
+                                        """, Severity.TRACE, Status.BAD_REQUEST);
+    //endregion User Service
 
     private final String   pattern;
     private final Severity severity;

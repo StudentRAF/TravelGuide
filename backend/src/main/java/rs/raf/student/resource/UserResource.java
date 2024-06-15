@@ -12,8 +12,11 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.apache.commons.lang3.tuple.Pair;
 import rs.raf.student.domain.Pageable;
 import rs.raf.student.dto.user.UserCreateDto;
+import rs.raf.student.dto.user.UserGetDto;
+import rs.raf.student.dto.user.UserLoginDto;
 import rs.raf.student.dto.user.UserUpdateDto;
 import rs.raf.student.exception.ExceptionUtils;
 import rs.raf.student.service.UserService;
@@ -61,6 +64,21 @@ public class UserResource {
         return ExceptionUtils.handleResponse(() -> Response.status(Status.OK)
                                                            .entity(service.update(updateDto))
                                                            .build());
+    }
+
+    @POST
+    @Path("/login")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response login(@Valid UserLoginDto loginDto) {
+        return ExceptionUtils.handleResponse(() -> {
+            Pair<String, UserGetDto> userData = service.login(loginDto);
+
+            return Response.status(Status.OK)
+                           .entity(userData.getRight())
+                           .header("Authorization", userData.getLeft())
+                           .build();
+        });
     }
 
 }

@@ -1,11 +1,18 @@
 package rs.raf.student.service;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import jakarta.inject.Inject;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import rs.raf.student.domain.Page;
 import rs.raf.student.domain.Pageable;
 import rs.raf.student.dto.user.UserCreateDto;
 import rs.raf.student.dto.user.UserGetDto;
+import rs.raf.student.dto.user.UserLoginDto;
 import rs.raf.student.dto.user.UserUpdateDto;
+import rs.raf.student.exception.ExceptionType;
+import rs.raf.student.exception.TGException;
 import rs.raf.student.mapper.UserMapper;
 import rs.raf.student.model.User;
 import rs.raf.student.model.UserRole;
@@ -13,6 +20,9 @@ import rs.raf.student.repository.IUserRepository;
 import rs.raf.student.repository.IUserRoleRepository;
 import rs.raf.student.utils.Utilities;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -28,6 +38,8 @@ public class UserService {
 
     @Inject
     private IUserRoleRepository userRoleRepository;
+
+    private final Algorithm algorithm = Algorithm.HMAC512("travel-guide");
 
     public Page<UserGetDto> getAll(Pageable pageable) {
         List<User> page = repository.findAll(pageable);
@@ -47,6 +59,56 @@ public class UserService {
 
     public UserGetDto getById(Long id) {
         return mapUser(repository.findById(id));
+    }
+
+    public Pair<String, UserGetDto> login(UserLoginDto loginDto) {
+        User user = repository.findByEmail(loginDto.getEmail());
+
+        if (user == null)
+            throw new TGException(ExceptionType.SERVICE_USER_LOGIN_INVALID_EMAIL,
+                                  loginDto.getEmail(),
+                                  loginDto.getPassword());
+
+        if (!user.getPassword().equals(Utilities.hashPassword(loginDto.getPassword(), user.getSalt())))
+            throw new TGException(ExceptionType.SERVICE_USER_LOGIN_INVALID_PASSWORD,
+                                  loginDto.getEmail(),
+                                  loginDto.getPassword());
+
+        UserGetDto userDto = mapUser(user);
+
+        Instant issuedAt  = Instant.now();
+        Instant expiresAt = LocalDateTime.now()
+                                         .plusHours(1)
+                                         .toInstant(ZoneId.systemDefault()
+                                                          .getRules()
+                                                          .getOffset(issuedAt));
+
+        String token = JWT.create()
+                          .withIssuedAt(issuedAt)
+                          .withExpiresAt(expiresAt)
+                          .withSubject(user.getEmail())
+                          .withPayload(Map.of("role", userDto.getUserRole()
+                                                                .getName()))
+                          .sign(algorithm);
+
+        return ImmutablePair.of(token, userDto);
+    }
+
+    public UserRole decodeRole(String token) {
+        try {
+            return UserRole.valueOf(JWT.require(algorithm)
+                                       .build()
+                                       .verify(token)
+                                       .getClaim("role")
+                                       .asString())
+                           .get();
+        }
+        catch (Exception exception) {
+            throw new TGException(ExceptionType.SERVICE_USER_DECODE_INVALID_TOKEN,
+                                  token,
+                                  exception.getMessage());
+        }
+
     }
 
     public UserGetDto create(UserCreateDto createDto) {
