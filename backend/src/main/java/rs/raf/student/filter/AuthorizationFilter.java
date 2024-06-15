@@ -50,8 +50,11 @@ public class AuthorizationFilter implements ContainerRequestFilter {
             PathRequest.of(GET,    "/articles/activity/id"   ), List.of(ADMIN, EDITOR, ANYONE),
             PathRequest.of(POST,   "/articles"               ), List.of(ADMIN, EDITOR),
             PathRequest.of(PUT,    "/articles"               ), List.of(ADMIN, EDITOR),
-            PathRequest.of(PUT,    "/articles/comment"       ), List.of(ADMIN, EDITOR, ANYONE),
             PathRequest.of(DELETE, "/articles"               ), List.of(ADMIN, EDITOR)
+        ));
+
+        authorizationMap.putAll(Map.of(
+            PathRequest.of(POST, "/comments"), List.of(ADMIN, EDITOR, ANYONE)
         ));
     }
 
