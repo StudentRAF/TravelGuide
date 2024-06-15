@@ -1,13 +1,21 @@
 package rs.raf.student.resource;
 
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import rs.raf.student.domain.Pageable;
+import rs.raf.student.dto.article.ArticleCreateDto;
+import rs.raf.student.dto.article.ArticleUpdateDto;
 import rs.raf.student.exception.ExceptionUtils;
 import rs.raf.student.service.ArticleService;
 
@@ -23,10 +31,71 @@ public class ArticleResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAll(@QueryParam("page") int page, @QueryParam("size") int size, @QueryParam("sort") List<String> sort) {
+    public Response getAll(@QueryParam("page") int          page,
+                           @QueryParam("size") int          size,
+                           @QueryParam("sort") List<String> sort) {
         return ExceptionUtils.handleResponse(() -> Response.status(Status.OK)
                                                            .entity(service.getAll(Pageable.of(page, size, sort)))
                                                            .build());
+    }
+
+    @GET
+    @Path("/destination/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getByDestination(@PathParam("id")    Long         destinationId,
+                                     @QueryParam("page") int          page,
+                                     @QueryParam("size") int          size,
+                                     @QueryParam("sort") List<String> sort) {
+        return ExceptionUtils.handleResponse(() -> Response.status(Status.OK)
+                                                           .entity(service.getByDestinationId(destinationId,Pageable.of(page, size, sort)))
+                                                           .build());
+    }
+
+    @GET
+    @Path("/activity/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getByActivity(@PathParam("id")    Long         activityId,
+                                  @QueryParam("page") int          page,
+                                  @QueryParam("size") int          size,
+                                  @QueryParam("sort") List<String> sort) {
+        return ExceptionUtils.handleResponse(() -> Response.status(Status.OK)
+                                                           .entity(service.getByActivityId(activityId,Pageable.of(page, size, sort)))
+                                                           .build());
+    }
+
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getById(@PathParam("id") Long id) {
+        return ExceptionUtils.handleResponse(() -> Response.status(Status.OK)
+                                                           .entity(service.getById(id))
+                                                           .build());
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response create(@Valid ArticleCreateDto createDto) {
+        return ExceptionUtils.handleResponse(() -> Response.status(Status.CREATED)
+                                                           .entity(service.create(createDto))
+                                                           .build());
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response update(@Valid ArticleUpdateDto updateDto) {
+        return ExceptionUtils.handleResponse(() -> Response.status(Status.OK)
+                                                           .entity(service.update(updateDto))
+                                                           .build());
+    }
+
+    @DELETE
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteById(@PathParam("id") Long id) {
+        return ExceptionUtils.handleResponse(() -> service.delete(id), Response.status(Status.OK)
+                                                                               .build());
     }
 
 }

@@ -19,8 +19,6 @@ import rs.raf.student.repository.ICommentRepository;
 import rs.raf.student.repository.IDestinationRepository;
 import rs.raf.student.repository.IUserRepository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -63,6 +61,11 @@ public class ArticleService {
                        pageable);
     }
 
+    public Page<ArticleGetDto> getByActivityId(Long activityId, Pageable pageable) {
+        return Page.of(mapArticles(articleActivityRepository.findAllArticles(activityId, pageable)),
+                       pageable);
+    }
+
     public ArticleGetDto create(ArticleCreateDto createDto) {
         return mapArticle(repository.create(createDto));
     }
@@ -76,24 +79,28 @@ public class ArticleService {
     }
 
     private ArticleGetDto mapArticle(Article article) {
-        User           user        = userRepository.findById(article.getAuthorId());
-        Destination    destination = destinationRepository.findById(article.getDestinationId());
-        List<Activity> activities  = articleActivityRepository.findAllActivities(article.getId());
-        List<Comment>  comments    = commentRepository.findByArticle(article.getId());
+        try (ExecutorService executors = Executors.newFixedThreadPool(4)) {
+            var futureUser        = executors.submit(() -> userRepository.findById(article.getAuthorId()));
+            var futureDestination = executors.submit(() -> destinationRepository.findById(article.getDestinationId()));
+            var futureActivities  = executors.submit(() -> articleActivityRepository.findAllActivities(article.getId()));
+            var futureComments    = executors.submit(() -> commentRepository.findByArticle(article.getId()));
 
-        return mapper.mapDto(article, user, destination, activities, comments);
+            User           user        = futureUser.get();
+            Destination    destination = futureDestination.get();
+            List<Activity> activities  = futureActivities.get();
+            List<Comment>  comments    = futureComments.get();
+
+            return mapper.mapDto(article, user, destination, activities, comments);
+        }
+        catch (ExecutionException | InterruptedException exception) {
+            exception.printStackTrace(System.err);
+        }
+
+        return null;
     }
 
     private List<ArticleGetDto> mapArticles(List<Article> articles) {
-        Map<Long, List<Activity>> activities       = new HashMap<>();
-        Map<Long, User>           users            = new HashMap<>();
-        Map<Long, Destination>    destinations     = new HashMap<>();
-        Map<Long, List<Comment>>  comments         = new HashMap<>();
-        Map<Long, List<Long>>     activityIds      = new HashMap<>();
-        List<Activity>            uniqueActivities = new ArrayList<>();
-
         try (ExecutorService executors = Executors.newFixedThreadPool(4)) {
-
             var futureActivityIds = executors.submit(() -> articles.parallelStream()
                                                                    .map(article -> ImmutablePair.of(article.getId(), articleActivityRepository.findAllActivityIds(article.getId())))
                                                                    .collect(Collectors.toMap(ImmutablePair::getLeft, ImmutablePair::getRight)));
@@ -118,7 +125,7 @@ public class ArticleService {
                                                                 .map(article -> ImmutablePair.of(article.getId(), commentRepository.findByArticle(article.getId())))
                                                                 .collect(Collectors.toMap(ImmutablePair::getKey, ImmutablePair::getValue)));
 
-            activityIds.putAll(futureActivityIds.get());
+            Map<Long, List<Long>> activityIds = futureActivityIds.get();
 
             var futureUniqueActivities = executors.submit(() -> articleActivityRepository.findAllActivitiesByArticleIds(activityIds.values()
                                                                                                                                    .stream()
@@ -126,29 +133,31 @@ public class ArticleService {
                                                                                                                                    .collect(Collectors.toSet())
                                                                                                                                    .stream()
                                                                                                                                    .toList()));
-            users.putAll(futureUsers.get());
-            destinations.putAll(futureDestinations.get());
-            comments.putAll(futureComments.get());
-            uniqueActivities.addAll(futureUniqueActivities.get());
+
+            Map<Long, User>           users            = futureUsers.get();
+            Map<Long, Destination>    destinations     = futureDestinations.get();
+            Map<Long, List<Comment>>  comments         = futureComments.get();
+            List<Activity>            uniqueActivities = futureUniqueActivities.get();
+
+            Map<Long, List<Activity>> activities       = articles.stream()
+                                                                 .map(article -> ImmutablePair.of(article.getId(), uniqueActivities.stream()
+                                                                                                                                   .filter(activity -> activityIds.get(article.getId())
+                                                                                                                                                                  .contains(activity.getId()))
+                                                                                                                                   .toList()))
+                                                                 .collect(Collectors.toMap(ImmutablePair::getKey, ImmutablePair::getValue));
+            return articles.stream()
+                           .map(article -> mapper.mapDto(article,
+                                                         users.get(article.getAuthorId()),
+                                                         destinations.get(article.getDestinationId()),
+                                                         activities.get(article.getId()),
+                                                         comments.get(article.getId())))
+                           .toList();
         }
         catch (ExecutionException | InterruptedException exception) {
             exception.printStackTrace(System.err);
         }
 
-        activities.putAll(articles.stream()
-                                  .map(article -> ImmutablePair.of(article.getId(), uniqueActivities.stream()
-                                                                                                    .filter(activity -> activityIds.get(article.getId())
-                                                                                                                                   .contains(activity.getId()))
-                                                                                                    .toList()))
-                                  .collect(Collectors.toMap(ImmutablePair::getKey, ImmutablePair::getValue)));
-
-        return articles.stream()
-                       .map(article -> mapper.mapDto(article,
-                                                     users.get(article.getAuthorId()),
-                                                     destinations.get(article.getDestinationId()),
-                                                     activities.get(article.getId()),
-                                                     comments.get(article.getId())))
-                       .toList();
+        return List.of();
     }
 
 }
