@@ -23,6 +23,10 @@ public class CommentMapper {
             );
     }
 
+    public Comment map(CommentCreateDto createDto) {
+        return map(new Comment(), createDto);
+    }
+
     public Comment map(Comment comment, CommentCreateDto createDto) {
         comment.setContent(createDto.getContent());
         comment.setDisplayName(createDto.getDisplayNane());
