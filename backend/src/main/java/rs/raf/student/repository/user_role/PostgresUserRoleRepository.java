@@ -5,12 +5,12 @@ import rs.raf.student.exception.TGException;
 import rs.raf.student.model.UserRole;
 import rs.raf.student.repository.IUserRoleRepository;
 import rs.raf.student.repository.PostgresAbstractRepository;
+import rs.raf.student.repository.ResultSetReader;
 import rs.raf.student.sql.PostgresType;
 import rs.raf.student.sql.StatementBuilder;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class PostgresUserRoleRepository extends PostgresAbstractRepository imple
             ResultSet resultSet         = builder.executeQuery()
         ) {
             while (resultSet.next())
-                roles.add(loadRole(resultSet));
+                roles.add(ResultSetReader.readUserRole(resultSet));
         }
         catch (Exception exception) {
             throw new TGException(ExceptionType.REPOSITORY_USER_ROLE_SQL_EXCEPTION, exception, exception.getMessage());
@@ -55,7 +55,7 @@ public class PostgresUserRoleRepository extends PostgresAbstractRepository imple
                                                  .executeQuery()
         ) {
             while (resultSet.next())
-                roles.add(loadRole(resultSet));
+                roles.add(ResultSetReader.readUserRole(resultSet));
         }
         catch (Exception exception) {
             throw new TGException(ExceptionType.REPOSITORY_USER_ROLE_SQL_EXCEPTION, exception, exception.getMessage());
@@ -78,7 +78,7 @@ public class PostgresUserRoleRepository extends PostgresAbstractRepository imple
                                                  .executeQuery()
         ) {
             if (resultSet.next())
-                return loadRole(resultSet);
+                return ResultSetReader.readUserRole(resultSet);
         }
         catch (Exception exception) {
             throw new TGException(ExceptionType.REPOSITORY_USER_ROLE_SQL_EXCEPTION, exception, exception.getMessage());
@@ -102,18 +102,13 @@ public class PostgresUserRoleRepository extends PostgresAbstractRepository imple
         ) {
             if (resultSet.next())
                 if (resultSet.next())
-                    return loadRole(resultSet);
+                    return ResultSetReader.readUserRole(resultSet);
         }
         catch (Exception exception) {
             throw new TGException(ExceptionType.REPOSITORY_USER_ROLE_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
         throw new TGException(ExceptionType.REPOSITORY_USER_ROLE_FIND_NAME_NOT_FOUND, name);
-    }
-
-    private UserRole loadRole(ResultSet resultSet) throws SQLException {
-        return new UserRole(resultSet.getLong("id"),
-                            resultSet.getString("name"));
     }
 
 }

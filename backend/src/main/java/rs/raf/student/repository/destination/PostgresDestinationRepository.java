@@ -10,12 +10,12 @@ import rs.raf.student.mapper.DestinationMapper;
 import rs.raf.student.model.Destination;
 import rs.raf.student.repository.IDestinationRepository;
 import rs.raf.student.repository.PostgresAbstractRepository;
+import rs.raf.student.repository.ResultSetReader;
 import rs.raf.student.sql.PostgresType;
 import rs.raf.student.sql.StatementBuilder;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +38,7 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
             ResultSet resultSet         = builder.executeQuery()
         ) {
             while (resultSet.next())
-                destinations.add(loadDestination(resultSet));
+                destinations.add(ResultSetReader.readDestination(resultSet));
         }
         catch (Exception exception) {
             throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception, exception.getMessage());
@@ -65,7 +65,7 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
                 if (!resultSet.next())
                     break;
 
-                destinations.add(loadDestination(resultSet));
+                destinations.add(ResultSetReader.readDestination(resultSet));
             } while (!resultSet.isLast());
 
             if (resultSet.isLast())
@@ -92,7 +92,7 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
                                                  .executeQuery()
         ) {
             if (resultSet.next())
-                return loadDestination(resultSet);
+                return ResultSetReader.readDestination(resultSet);
         }
         catch (Exception exception) {
             throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception, exception.getMessage());
@@ -117,7 +117,7 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
                                                  .executeQuery()
         ) {
             while (resultSet.next())
-                destinations.add(loadDestination(resultSet));
+                destinations.add(ResultSetReader.readDestination(resultSet));
         }
         catch (Exception exception) {
             throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception, exception.getMessage());
@@ -186,7 +186,7 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
                                                                                       .prepareLong(destination.getId()))
         ) {
             if (resultSet.next())
-                return loadDestination(resultSet);
+                return ResultSetReader.readDestination(resultSet);
         }
         catch (Exception exception) {
             throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception, exception.getMessage());
@@ -227,12 +227,6 @@ public class PostgresDestinationRepository extends PostgresAbstractRepository im
             throw new TGException(ExceptionType.REPOSITORY_DESTINATION_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
-    }
-
-    private Destination loadDestination(ResultSet resultSet) throws SQLException {
-        return new Destination(resultSet.getLong("id"),
-                               resultSet.getString("name"),
-                               resultSet.getString("description"));
     }
 
 }

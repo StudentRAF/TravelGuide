@@ -10,12 +10,12 @@ import rs.raf.student.mapper.UserMapper;
 import rs.raf.student.model.User;
 import rs.raf.student.repository.IUserRepository;
 import rs.raf.student.repository.PostgresAbstractRepository;
+import rs.raf.student.repository.ResultSetReader;
 import rs.raf.student.sql.PostgresType;
 import rs.raf.student.sql.StatementBuilder;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +42,7 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                 if (!resultSet.next())
                     break;
 
-                users.add(loadUser(resultSet));
+                users.add(ResultSetReader.readUser(resultSet));
             } while (!resultSet.isLast());
 
             if (resultSet.isLast())
@@ -69,7 +69,7 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                                                  .executeQuery()
         ) {
             if (resultSet.next())
-                return loadUser(resultSet);
+                return ResultSetReader.readUser(resultSet);
         }
         catch (Exception exception) {
             throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception, exception.getMessage());
@@ -94,7 +94,7 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                                                  .executeQuery()
         ) {
             while (resultSet.next())
-                users.add(loadUser(resultSet));
+                users.add(ResultSetReader.readUser(resultSet));
         }
         catch (Exception exception) {
             throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception, exception.getMessage());
@@ -117,7 +117,7 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                                                  .executeQuery()
         ) {
             if (resultSet.next())
-                return loadUser(resultSet);
+                return ResultSetReader.readUser(resultSet);
         }
         catch (Exception exception) {
             throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception, exception.getMessage());
@@ -196,7 +196,7 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                                                                                       .prepareLong(user.getId()))
         ) {
             if (resultSet.next())
-                return loadUser(resultSet);
+                return ResultSetReader.readUser(resultSet);
         }
         catch (Exception exception) {
             throw new TGException(ExceptionType.REPOSITORY_USER_SQL_EXCEPTION, exception, exception.getMessage());
@@ -207,17 +207,6 @@ public class PostgresUserRepository extends PostgresAbstractRepository implement
                               updateDto.getFirstName(),
                               updateDto.getLastName(),
                               updateDto.getRoleId().toString());
-    }
-
-    private User loadUser(ResultSet resultSet) throws SQLException {
-        return new User(resultSet.getLong("id"),
-                        resultSet.getString("first_name"),
-                        resultSet.getString("last_name"),
-                        resultSet.getString("email"),
-                        resultSet.getString("salt"),
-                        resultSet.getString("password"),
-                        resultSet.getLong("role_id"),
-                        resultSet.getBoolean("enabled"));
     }
 
 }

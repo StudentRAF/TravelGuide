@@ -8,11 +8,11 @@ import rs.raf.student.mapper.ActivityMapper;
 import rs.raf.student.model.Activity;
 import rs.raf.student.repository.IActivityRepository;
 import rs.raf.student.repository.PostgresAbstractRepository;
+import rs.raf.student.repository.ResultSetReader;
 import rs.raf.student.sql.StatementBuilder;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class PostgresActivityRepository extends PostgresAbstractRepository imple
             ResultSet resultSet         = builder.executeQuery()
         ) {
             while (resultSet.next())
-                activities.add(loadActivity(resultSet));
+                activities.add(ResultSetReader.readActivity(resultSet));
         }
         catch (Exception exception) {
             throw new TGException(ExceptionType.REPOSITORY_ACTIVITY_SQL_EXCEPTION, exception, exception.getMessage());
@@ -58,7 +58,7 @@ public class PostgresActivityRepository extends PostgresAbstractRepository imple
                                                  .executeQuery()
         ) {
             if (resultSet.next())
-                return loadActivity(resultSet);
+                return ResultSetReader.readActivity(resultSet);
         }
         catch (Exception exception) {
             throw new TGException(ExceptionType.REPOSITORY_ACTIVITY_SQL_EXCEPTION, exception, exception.getMessage());
@@ -81,7 +81,7 @@ public class PostgresActivityRepository extends PostgresAbstractRepository imple
                                                  .executeQuery()
         ) {
             if (resultSet.next())
-                return loadActivity(resultSet);
+                return ResultSetReader.readActivity(resultSet);
         }
         catch (Exception exception) {
             throw new TGException(ExceptionType.REPOSITORY_ACTIVITY_SQL_EXCEPTION, exception, exception.getMessage());
@@ -118,11 +118,6 @@ public class PostgresActivityRepository extends PostgresAbstractRepository imple
 
         throw new TGException(ExceptionType.REPOSITORY_ACTIVITY_CREATE_NO_RESULT_SET,
                               createDto.getName());
-    }
-
-    private Activity loadActivity(ResultSet resultSet) throws SQLException {
-        return new Activity(resultSet.getLong("id"),
-                            resultSet.getString("name"));
     }
 
 }
