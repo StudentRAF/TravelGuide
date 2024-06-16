@@ -9,13 +9,6 @@ module.exports = {
   ],
   prefix: "",
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
-    },
     borderRadius: {
       small:  "0.25rem", // 4px
       normal: "0.5rem",  // 8px
