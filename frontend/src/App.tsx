@@ -24,7 +24,7 @@ const App = () => {
   return (
     <>
       <Header />
-      <main className="flex flex-grow w-full px-10 py-5">
+      <main className="flex flex-grow w-full px-48 pt-5 pb-10">
         <Routes>
           <Route path="/"                         element={ <Homepage />               } />
           <Route path="/cms"                      element={ <CMS />                    } />

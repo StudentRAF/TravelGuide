@@ -13,6 +13,7 @@ import { Separator } from "@/components/common/Separator.tsx";
 import { Skeleton } from "@/components/common/Skeleton.tsx";
 import { useNavigate } from "react-router-dom";
 import { Activity } from "@/types/activity.ts";
+import { Card } from "@/components/common/Card.tsx";
 
 const DestinationMenu = () => {
   const pageSize = 15;
@@ -50,7 +51,7 @@ const DestinationMenu = () => {
   }
 
   return (
-    <div className="flex flex-col w-72 p-5 bg-gray-850 h-fit rounded-large">
+    <Card className="flex flex-col w-72 h-fit p-5 bg-gray-850">
       <h1 className="text-title text-center mt-1 mb-3">
         Activities
       </h1>
@@ -100,7 +101,7 @@ const DestinationMenu = () => {
           </PaginationContent>
         </Pagination>
       </div>
-    </div>
+    </Card>
   )
 }
 

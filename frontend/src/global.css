@@ -22,7 +22,7 @@
   }
 
   html {
-    @apply min-h-screen bg-gray-900 overflow-scroll;
+    @apply min-h-screen bg-gray-900 overflow-y-scroll;
   }
 
   body {

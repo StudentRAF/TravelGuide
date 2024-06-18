@@ -1,13 +1,14 @@
 import { Destination } from "@/types/destination.ts";
 import { Activity } from "@/types/activity.ts";
 import { Comment } from "@/types/comment.ts";
+import { User } from "@/types/user.ts";
 
 export type Article = {
   id:          number,
   title:       string,
   content:     string,
-  author:      string,
-  description: Destination,
+  author:      User,
+  destination: Destination,
   activities:  Activity[],
   comments:    Comment[],
   created_at:  Date,
