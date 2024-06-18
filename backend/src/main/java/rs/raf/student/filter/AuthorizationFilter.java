@@ -56,6 +56,10 @@ public class AuthorizationFilter implements ContainerRequestFilter {
         authorizationMap.putAll(Map.of(
             PathRequest.of(POST, "/comments"), List.of(ADMIN, EDITOR, ANYONE)
         ));
+
+        authorizationMap.putAll(Map.of(
+            PathRequest.of(GET, "/activities"), List.of(ADMIN, EDITOR, ANYONE)
+        ));
     }
 
     @Inject

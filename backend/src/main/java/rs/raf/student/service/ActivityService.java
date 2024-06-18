@@ -1,12 +1,12 @@
 package rs.raf.student.service;
 
 import jakarta.inject.Inject;
+import rs.raf.student.domain.Page;
+import rs.raf.student.domain.Pageable;
 import rs.raf.student.dto.activity.ActivityCreateDto;
 import rs.raf.student.dto.activity.ActivityGetDto;
 import rs.raf.student.mapper.ActivityMapper;
 import rs.raf.student.repository.IActivityRepository;
-
-import java.util.List;
 
 public class ActivityService {
 
@@ -17,11 +17,12 @@ public class ActivityService {
     private IActivityRepository repository;
 
 
-    public List<ActivityGetDto> getAll() {
-        return repository.findAll()
-                         .stream()
-                         .map(mapper::mapDto)
-                         .toList();
+    public Page<ActivityGetDto> getAll(Pageable pageable) {
+        return Page.of(repository.findAll(pageable)
+                                 .stream()
+                                 .map(mapper::mapDto)
+                                 .toList(),
+                       pageable);
     }
 
     public ActivityGetDto getById(Long id) {

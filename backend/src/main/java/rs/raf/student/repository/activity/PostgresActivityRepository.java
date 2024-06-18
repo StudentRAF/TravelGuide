@@ -1,6 +1,7 @@
 package rs.raf.student.repository.activity;
 
 import jakarta.inject.Inject;
+import rs.raf.student.domain.Pageable;
 import rs.raf.student.dto.activity.ActivityCreateDto;
 import rs.raf.student.exception.ExceptionType;
 import rs.raf.student.exception.TGException;
@@ -22,20 +23,28 @@ public class PostgresActivityRepository extends PostgresAbstractRepository imple
     private ActivityMapper mapper;
 
     @Override
-    public List<Activity> findAll() {
+    public List<Activity> findAll(Pageable pageable) {
         List<Activity> activities = new ArrayList<>();
 
         try(
             Connection connection = createConnection();
             StatementBuilder builder    = StatementBuilder.create(connection,
                                                                   """
-                                                                  select *
+                                                                  select *, count(*) over() as count
                                                                   from activity
-                                                                  """);
+                                                                  """,
+                                                                  pageable);
             ResultSet resultSet         = builder.executeQuery()
         ) {
-            while (resultSet.next())
+            do {
+                if (!resultSet.next())
+                    break;
+
                 activities.add(ResultSetReader.readActivity(resultSet));
+            } while (!resultSet.isLast());
+
+            if (resultSet.isLast())
+                pageable.setTotalElements(resultSet.getInt("count"));
         }
         catch (Exception exception) {
             throw new TGException(ExceptionType.REPOSITORY_ACTIVITY_SQL_EXCEPTION, exception, exception.getMessage());
