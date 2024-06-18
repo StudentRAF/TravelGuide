@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import Header from "@/components/header/Header.tsx";
-import Footer from "@/components/Footer.tsx";
+import Footer from "@/components/footer/Footer.tsx";
 import Homepage from "@/pages/Homepage.tsx";
 import CMS from "@/pages/cms/CMS.tsx";
 import CMSLogin from "@/pages/cms/CMSLogin.tsx";

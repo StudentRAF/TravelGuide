@@ -10,6 +10,7 @@ module.exports = {
   prefix: "",
   theme: {
     borderRadius: {
+      none:   "0",       // 0px
       small:  "0.25rem", // 4px
       normal: "0.5rem",  // 8px
       medium: "0.75rem", // 12px

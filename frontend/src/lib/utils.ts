@@ -4,7 +4,7 @@ import { extendTailwindMerge } from "tailwind-merge";
 const fontFamily   : string[] = ["sans"];
 const fontSize     : string[] = ["small", "normal", "large", "title", "heading"];
 const boxShadow    : string[] = ["normal", "medium", "large"];
-const borderRadius : string[] = ["small", "normal", "medium", "large", "full"];
+const borderRadius : string[] = ["none", "small", "normal", "medium", "large", "full"];
 const spacing      : string[] = [ "140", "160", "200", "300" ];
 
 const twMerge = extendTailwindMerge({
