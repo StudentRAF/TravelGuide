@@ -11,10 +11,12 @@ const buttonVariants = cva(
       variant: {
         default: "bg-blue-500 text-primary-foreground hover:bg-primary/90",
         outline: "border border-gray-700 bg-transparent hover:bg-gray-850",
+        navigation: "bg-transparent hover:bg-gray-800",
         ghost: " hover:bg-gray-850 hover:text-gray-50",
       },
       size: {
         default: "h-10 px-4 py-2",
+        navigation: "px-5 py-1.5",
         icon: "h-10 w-10",
       },
       border: {
