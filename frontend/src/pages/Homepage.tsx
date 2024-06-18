@@ -9,7 +9,6 @@ import { PaginationSection } from "@/components/common/Pagination.tsx";
 
 const Homepage = () => {
   const pageSize = 5;
-  const totalPages = 10;
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [articlePage, setArticlePage] = useState<Page<Article>>();
@@ -42,14 +41,11 @@ const Homepage = () => {
                 <ArticleCard article={article} key={article.id}/>
               ))
           }
-          {
-            totalPages > 1 &&
-              <PaginationSection
-                currentPage={page}
-                totalPages={articlePage ? articlePage.total_pages : 0}
-                onChangePage={setPage}
-              />
-          }
+          <PaginationSection
+            currentPage={page}
+            totalPages={articlePage ? articlePage.total_pages : 0}
+            onChangePage={setPage}
+          />
         </div>
         <ActivityMenu/>
       </div>
