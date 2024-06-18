@@ -22,13 +22,14 @@
   }
 
   html {
-    @apply size-full bg-gray-900;
+    @apply min-h-screen bg-gray-900;
   }
+
   body {
-    @apply size-full text-gray-50 font-medium font-sans text-normal;
+    @apply min-h-screen text-gray-50 font-medium font-sans text-normal;
   }
 
   #root {
-    @apply size-full;
+    @apply flex flex-col min-h-screen;
   }
 }
