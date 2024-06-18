@@ -52,7 +52,7 @@ const PaginationLink = ({
     className={cn(
       buttonVariants({
         variant: isActive ? "outline" : "ghost",
-        border: "square",
+        border: "rounded",
         size,
       }),
       disabled && "pointer-events-none text-gray-300",
@@ -109,6 +109,103 @@ const PaginationEllipsis = ({
 )
 PaginationEllipsis.displayName = "PaginationEllipsis"
 
+export interface PaginationProps {
+  className?:    string,
+  currentPage:   number,
+  totalPages:    number,
+  onChangePage?: (currentPage: number) => void,
+}
+
+const PaginationSection = ({ className, currentPage, totalPages, onChangePage }: PaginationProps) => {
+  if (totalPages < 2)
+    return <></>
+
+  return (
+    <div className={cn("flex w-fit p-1 rounded-full bg-gray-850 border border-gray-700", className)}>
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              onClick={onChangePage && (() => onChangePage(currentPage - 1))}
+              disabled={currentPage === 1}
+            />
+          </PaginationItem>
+          <PaginationItem key={1}>
+            <PaginationLink
+              isActive={currentPage === 1}
+              onClick={onChangePage && (() => onChangePage(1))}
+            >
+              1
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem key={2}>
+            {
+              (totalPages <= 9 || currentPage <= 5) ?
+                <PaginationLink
+                  isActive={currentPage === 2}
+                  onClick={onChangePage && (() => onChangePage(2))}
+                >
+                  2
+                </PaginationLink>
+                :
+                <PaginationEllipsis/>
+            }
+          </PaginationItem>
+          {
+            [...Array(Math.min(5, Math.max(totalPages - 2, 0))).keys()].map((index) => {
+              const page: number = (totalPages <= 9 ? 5 : (currentPage + 4 < totalPages ? Math.max(currentPage, 5) : Math.min(currentPage, totalPages - 4))) + index - 2;
+
+              return(
+                <PaginationItem key={index + 3}>
+                  <PaginationLink
+                    isActive={currentPage === page}
+                    onClick={onChangePage && (() => onChangePage(page))}
+                  >
+                    {page}
+                  </PaginationLink>
+                </PaginationItem>
+              )
+            })
+          }
+          {
+            totalPages > 7 &&
+              <PaginationItem key={8}>
+                {
+                  (totalPages <= 9 || (currentPage + 4 >= totalPages)) ?
+                    <PaginationLink
+                      isActive={(totalPages < 9 && currentPage === totalPages) || (totalPages >= 9 && (currentPage + 1 === totalPages))}
+                      onClick={onChangePage && (() => onChangePage(totalPages < 9 ? 8 : totalPages - 1))}
+                    >
+                      {totalPages < 9 ? totalPages : totalPages - 1}
+                    </PaginationLink>
+                    :
+                    <PaginationEllipsis/>
+                }
+              </PaginationItem>
+          }
+          {
+            totalPages > 8 &&
+              <PaginationItem key={9}>
+                <PaginationLink
+                    isActive={currentPage === totalPages}
+                    onClick={() => onChangePage && onChangePage(totalPages)}
+                >
+                  {totalPages}
+                </PaginationLink>
+              </PaginationItem>
+          }
+          <PaginationItem>
+            <PaginationNext
+              onClick={onChangePage && (() => onChangePage(currentPage + 1))}
+              disabled={currentPage === totalPages}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    </div>
+  )
+}
+
 export {
   Pagination,
   PaginationContent,
@@ -117,4 +214,5 @@ export {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
+  PaginationSection
 }
