@@ -39,7 +39,7 @@ public class Page<Type> implements Iterable<Type> {
             (
                 content,
                 pageable.getTotalElements(),
-                pageable.getTotalElements() == 0 ? 0 : pageable.getTotalElements() / pageable.getPageSize() + 1,
+                pageable.getTotalElements() == 0 ? 0 : (pageable.getTotalElements() + pageable.getPageSize() - 1) / pageable.getPageSize(),
                 pageable.getPageSize(),
                 pageable.getPage(),
                 content.size(),
