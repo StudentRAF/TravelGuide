@@ -9,7 +9,7 @@ const Footer = () => {
 
   return (
     <footer className="flex w-full py-6 px-60 border-t border-gray-700 justify-between">
-      <div className="cursor-pointer" onClick={() => navigate("/")}>
+      <div className="cursor-pointer w-72" onClick={() => navigate("/")}>
         <LogoVertical/>
       </div>
       <div className="flex gap-32">
@@ -80,7 +80,7 @@ const Footer = () => {
         <span className="text-normal text-center text-gray-100">
           Get Our Latest Updates
         </span>
-        <div className="flex mt-5">
+        <div className="flex mt-5 w-72">
           <Input className="rounded-r-none" placeholder="Enter email"/>
           <Button className="rounded-l-none pl-3">
             Subscribe
