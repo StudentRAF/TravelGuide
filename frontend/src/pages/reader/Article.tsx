@@ -65,7 +65,7 @@ const Article = () => {
 
   return (
     <div className="flex flex-row w-full justify-between">
-      <div className="w-56 flex flex-col gap-5">
+      <div className="w-72 flex flex-col gap-5">
         <Card className="w-full bg-gray-850 p-8 h-fit flex flex-col items-center gap-3">
           <h1 className="text-title text-center">
             Destination
@@ -152,7 +152,7 @@ const Article = () => {
         </Card>
       </div>
 
-      <div className="w-56 flex flex-col gap-5">
+      <div className="w-72 flex flex-col gap-5">
         <Card className="w-full bg-gray-850 p-8 h-fit flex flex-col items-center gap-3">
           <h1 className="text-title text-center">
             Author
