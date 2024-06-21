@@ -1,5 +1,6 @@
 import React from "react";
 import { User } from "@/types/user.ts";
+import { getLocalStorageData, USER, USER_TOKEN } from "@/lib/local_storage.ts";
 
 export type ApplicationData = {
   user: User,
@@ -11,9 +12,20 @@ export type ApplicationContextData = {
   data?: ApplicationData,
 }
 
-export const defaultAppData : ApplicationData | undefined = undefined;
+export const getDefaultApplicationData = (): ApplicationData | undefined => {
+  const user  = getLocalStorageData(USER,       undefined);
+  const token = getLocalStorageData(USER_TOKEN, undefined);
+
+  if (!user || !token)
+    return undefined;
+
+  return {
+    user: user,
+    authorization: token,
+  }
+};
 
 export const ApplicationContext = React.createContext<ApplicationContextData>({
   setData: () => {},
-  data: defaultAppData,
+  data: getDefaultApplicationData(),
 });

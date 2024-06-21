@@ -18,12 +18,20 @@ import Article from "@/pages/reader/Article.tsx";
 import ArticlesForActivity from "@/pages/reader/ArticlesForActivity.tsx";
 import ArticlesForDestination from "@/pages/reader/ArticlesForDestination.tsx";
 import Destinations from "@/pages/reader/Destinations.tsx";
-import { ApplicationContext, ApplicationData } from "@/lib/context.ts";
-import { useState } from "react";
+import { ApplicationContext, ApplicationData, getDefaultApplicationData } from "@/lib/context.ts";
+import { useEffect, useState } from "react";
+import { setLocalStorageDataAsync, USER, USER_TOKEN } from "@/lib/local_storage.ts";
 
 
 const App = () => {
-  const [data, setData] = useState<ApplicationData>();
+  const [data, setData] = useState<ApplicationData | undefined>(getDefaultApplicationData);
+
+  useEffect(() => {
+    if (data) {
+      setLocalStorageDataAsync(USER,       data.user);
+      setLocalStorageDataAsync(USER_TOKEN, data.authorization);
+    }
+  }, [data]);
 
   return (
     <>
