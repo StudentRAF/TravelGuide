@@ -18,34 +18,43 @@ import Article from "@/pages/reader/Article.tsx";
 import ArticlesForActivity from "@/pages/reader/ArticlesForActivity.tsx";
 import ArticlesForDestination from "@/pages/reader/ArticlesForDestination.tsx";
 import Destinations from "@/pages/reader/Destinations.tsx";
+import { ApplicationContext, ApplicationData } from "@/lib/context.ts";
+import { useState } from "react";
 
 
 const App = () => {
+  const [data, setData] = useState<ApplicationData>();
+
   return (
     <>
-      <Header />
-      <main className="flex flex-grow w-full px-48 pt-5 pb-10 justify-center">
-        <Routes>
-          <Route path="/"                         element={ <Homepage />               } />
-          <Route path="/cms"                      element={ <CMS />                    } />
-          <Route path="/cms/login"                element={ <CMSLogin />               } />
-          <Route path="/cms/destinations"         element={ <CMSDestinations />        } />
-          <Route path="/cms/destinations/:id"     element={ <CMSDestination />         } />
-          <Route path="/cms/destinations/create"  element={ <CMSCreateDestination />   } />
-          <Route path="/cms/articles"             element={ <CMSArticles />            } />
-          <Route path="/cms/articles/:id"         element={ <CMSArticle />             } />
-          <Route path="/cms/articles/create"      element={ <CMSCreateArticle />       } />
-          <Route path="/cms/users"                element={ <CMSUsers />               } />
-          <Route path="/cms/users/:id"            element={ <CMSUser />                } />
-          <Route path="/cms/users/create"         element={ <CMSCreateUser />          } />
-          <Route path="/popular"                  element={ <PopularArticles />        } />
-          <Route path="/destinations"             element={ <Destinations />           } />
-          <Route path="/articles/:id"             element={ <Article />                } />
-          <Route path="/articles/activity/:id"    element={ <ArticlesForActivity />    } />
-          <Route path="/articles/destination/:id" element={ <ArticlesForDestination /> } />
-        </Routes>
-      </main>
-      <Footer />
+      <ApplicationContext.Provider value={{
+        setData: setData,
+        data: data,
+      }}>
+        <Header />
+        <main className="flex flex-grow w-full px-48 pt-5 pb-10 justify-center">
+          <Routes>
+            <Route path="/"                         element={ <Homepage />               } />
+            <Route path="/cms"                      element={ <CMS />                    } />
+            <Route path="/cms/login"                element={ <CMSLogin />               } />
+            <Route path="/cms/destinations"         element={ <CMSDestinations />        } />
+            <Route path="/cms/destinations/:id"     element={ <CMSDestination />         } />
+            <Route path="/cms/destinations/create"  element={ <CMSCreateDestination />   } />
+            <Route path="/cms/articles"             element={ <CMSArticles />            } />
+            <Route path="/cms/articles/:id"         element={ <CMSArticle />             } />
+            <Route path="/cms/articles/create"      element={ <CMSCreateArticle />       } />
+            <Route path="/cms/users"                element={ <CMSUsers />               } />
+            <Route path="/cms/users/:id"            element={ <CMSUser />                } />
+            <Route path="/cms/users/create"         element={ <CMSCreateUser />          } />
+            <Route path="/popular"                  element={ <PopularArticles />        } />
+            <Route path="/destinations"             element={ <Destinations />           } />
+            <Route path="/articles/:id"             element={ <Article />                } />
+            <Route path="/articles/activity/:id"    element={ <ArticlesForActivity />    } />
+            <Route path="/articles/destination/:id" element={ <ArticlesForDestination /> } />
+          </Routes>
+        </main>
+        <Footer />
+      </ApplicationContext.Provider>
     </>
   )
 }
