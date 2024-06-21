@@ -34,3 +34,23 @@ export type UserLogin = {
   email:    string,
   password: string,
 }
+
+const ADMIN: UserRole = {
+  id: 1,
+  name: 'Admin',
+}
+
+const EDITOR: UserRole = {
+  id: 2,
+  name: 'Editor',
+}
+
+export const isAdmin = (role: UserRole): boolean => {
+  return role.id   === ADMIN.id &&
+         role.name === ADMIN.name;
+}
+
+export const isEditor = (role: UserRole): boolean => {
+  return role.id   === EDITOR.id &&
+         role.name === EDITOR.name;
+}
