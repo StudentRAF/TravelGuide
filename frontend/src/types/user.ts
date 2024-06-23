@@ -26,7 +26,7 @@ export type UserUpdate = {
   first_name?: string,
   last_name?:  string,
   email?:      string,
-  user_id?:    number,
+  role_id?:    number,
   enabled?:    boolean,
 }
 
@@ -45,6 +45,10 @@ const EDITOR: UserRole = {
   name: 'Editor',
 }
 
+const roles: UserRole[] = [
+  ADMIN, EDITOR,
+]
+
 export const isAdmin = (role: UserRole): boolean => {
   return role.id   === ADMIN.id &&
          role.name === ADMIN.name;
@@ -53,4 +57,8 @@ export const isAdmin = (role: UserRole): boolean => {
 export const isEditor = (role: UserRole): boolean => {
   return role.id   === EDITOR.id &&
          role.name === EDITOR.name;
+}
+
+export const getRole = (name: string) : UserRole => {
+  return roles.filter((role) => role.name === name)[0]
 }
