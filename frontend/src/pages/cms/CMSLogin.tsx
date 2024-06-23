@@ -5,6 +5,7 @@ import { LoginForm, LoginFormData } from "@/components/form/LoginForm.tsx";
 import { Card } from "@/components/common/Card.tsx";
 import { User, UserLogin } from "@/types/user.ts";
 import axios from "axios";
+import { setLocalStorageDataAsync, USER, USER_TOKEN } from "@/lib/local_storage.ts";
 
 
 const CMSLogin = () => {
@@ -35,7 +36,9 @@ const CMSLogin = () => {
              authorization: token
            });
 
-           navigate("/cms");
+           setLocalStorageDataAsync(USER, user)
+             .then(() => setLocalStorageDataAsync(USER_TOKEN, token))
+             .then(() => navigate("/cms"));
          });
   }
 
