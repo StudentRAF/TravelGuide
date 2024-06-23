@@ -6,7 +6,7 @@ import DestinationMenu from "@/components/reader/DestinationMenu.tsx";
 import ArticleCard from "@/components/cards/ArticleCard.tsx";
 import { PaginationSection } from "@/components/common/Pagination.tsx";
 import ActivityMenu from "@/components/reader/ActivityMenu.tsx";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 type ActivityParams = {
   id: string
@@ -18,6 +18,7 @@ const ArticlesForActivity = () => {
   const [page, setPage] = useState(1);
   const [articlePage, setArticlePage] = useState<Page<Article>>();
   const activityParams = useParams<ActivityParams>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get(`http://localhost:8080/TravelGuide/api/v1/articles/activity/${activityParams.id}?page=${page - 1}&size=${pageSize}&sort=title`)
@@ -27,6 +28,10 @@ const ArticlesForActivity = () => {
   useEffect(() => {
     setLoading(!articlePage);
   }, [articlePage]);
+
+  const onClick = (article: Article) => {
+    navigate(`/articles/${article.id}`)
+  }
 
   return (
     <div className="flex flex-col w-full">
@@ -44,7 +49,11 @@ const ArticlesForActivity = () => {
               ))
               :
               articlePage?.content.map((article: Article) => (
-                <ArticleCard article={article} key={article.id}/>
+                <ArticleCard
+                  article={article}
+                  onClick={() => onClick(article)}
+                  key={article.id}
+                />
               ))
           }
           <PaginationSection

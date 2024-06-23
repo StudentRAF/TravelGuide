@@ -6,12 +6,14 @@ import { Article } from "@/types/article.ts";
 import axios from "axios";
 import ArticleCard from "@/components/cards/ArticleCard.tsx";
 import { PaginationSection } from "@/components/common/Pagination.tsx";
+import { useNavigate } from "react-router-dom";
 
 const Homepage = () => {
   const pageSize = 5;
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [articlePage, setArticlePage] = useState<Page<Article>>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get(`http://localhost:8080/TravelGuide/api/v1/articles?page=${page - 1}&size=${pageSize}&sort=created_at`)
@@ -21,6 +23,10 @@ const Homepage = () => {
   useEffect(() => {
     setLoading(!articlePage);
   }, [articlePage]);
+
+  const onClick = (article: Article) => {
+    navigate(`/articles/${article.id}`)
+  }
 
   return (
     <div className="flex flex-col w-full">
@@ -38,7 +44,11 @@ const Homepage = () => {
               ))
               :
               articlePage?.content.map((article: Article) => (
-                <ArticleCard article={article} key={article.id}/>
+                <ArticleCard
+                  article={article}
+                  onClick={() => onClick(article)}
+                  key={article.id}
+                />
               ))
           }
           <PaginationSection

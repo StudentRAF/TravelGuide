@@ -5,19 +5,21 @@ import { Badge } from "@/components/common/Badge.tsx";
 import ActivityIcon from "@/assets/Icons/ActivityIcon.tsx";
 import LocationIcon from "@/assets/Icons/LocationIcon.tsx";
 import { Skeleton } from "@/components/common/Skeleton.tsx";
-import { useNavigate } from "react-router-dom";
 
 export interface ArticleCardProps {
-  article?: Article,
+  article ?: Article,
+  onClick ?: () => void
 }
 
-const ArticleCard = ({ article } : ArticleCardProps) => {
-  const navigate = useNavigate();
+const ArticleCard = ({ article, onClick} : ArticleCardProps) => {
+  const handleClick = () => {
+    onClick && onClick();
+  }
 
   return (
     <Card
       className="flex flex-col p-8 w-200 bg-gray-850 hover:bg-gray-800 cursor-pointer"
-      onClick={() => navigate(`/articles/${article?.id}`)}
+      onClick={handleClick}
     >
       {article ?
         <>
