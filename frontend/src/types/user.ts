@@ -18,7 +18,7 @@ export type UserCreate = {
   email:            string,
   password:         string,
   confirm_password: string,
-  user_id:          number,
+  role_id:          number,
 }
 
 export type UserUpdate = {

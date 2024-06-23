@@ -188,7 +188,7 @@ const UserForm = ({ user, className, onSubmit, hasPassword = false } : UserFormP
           />
         </div>
         <Button className="self-center" type="submit">
-          Save changes
+          { hasPassword ? "Create user" : "Save changes" }
         </Button>
       </form>
     </Form>
