@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Page } from "@/types/common.ts";
-import axios, { HttpStatusCode } from "axios";
+import axios, { AxiosError, HttpStatusCode } from "axios";
 import { PaginationSection } from "@/components/common/Pagination.tsx";
 import { User } from "@/types/user.ts";
 import { Card } from "@/components/common/Card.tsx";
@@ -25,18 +25,18 @@ const CMSUsers = () => {
     }
 
     axios.get(`http://localhost:8080/TravelGuide/api/v1/users?page=${page - 1}&size=${pageSize}&sort=role_id&sort=first_name`, {
-      headers: {
-        Authorization: application.data.authorization,
-      }
-    }).then(response => {
-      if (response.status === HttpStatusCode.Unauthorized) {
-        clearUserDataAsync();
-        navigate("/cms");
-        return;
-      }
+            headers: {
+              Authorization: application.data.authorization,
+            }
+          })
+         .then(response => setUsersPage(response.data))
+         .catch((error: AxiosError) => {
+           if (error.response?.status !== HttpStatusCode.Unauthorized)
+             return;
 
-      setUsersPage(response.data)
-    })
+           clearUserDataAsync();
+           navigate("/cms");
+         });
   }, [page]);
 
   return (
