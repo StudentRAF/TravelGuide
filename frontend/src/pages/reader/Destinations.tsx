@@ -4,12 +4,14 @@ import { PaginationSection } from "@/components/common/Pagination.tsx";
 import { Destination } from "@/types/destination.ts";
 import DestinationCard from "@/components/cards/DestinationCard.tsx";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Destinations = () => {
   const pageSize = 5;
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [destinationPage, setDestinationPage] = useState<Page<Destination>>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get(`http://localhost:8080/TravelGuide/api/v1/destinations?page=${page - 1}&size=${pageSize}&sort=name`)
@@ -19,6 +21,10 @@ const Destinations = () => {
   useEffect(() => {
     setLoading(!destinationPage);
   }, [destinationPage]);
+
+  const onClick = (destination: Destination) => {
+    navigate(`/articles/destination/${destination.id}`)
+  }
 
   return (
     <div className="flex flex-col w-full">
@@ -33,7 +39,11 @@ const Destinations = () => {
             ))
             :
             destinationPage?.content.map((destination: Destination) => (
-              <DestinationCard destination={destination} key={destination.id}/>
+              <DestinationCard
+                destination={destination}
+                onClick={() => onClick(destination)}
+                key={destination.id}
+              />
             ))
         }
         <PaginationSection
