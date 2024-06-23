@@ -22,11 +22,11 @@
   }
 
   html {
-    @apply min-h-screen bg-gray-900 overflow-y-scroll;
+    @apply min-h-screen bg-gray-900;
   }
 
   body {
-    @apply min-h-screen text-gray-50 font-medium font-sans text-normal;
+    @apply min-h-screen w-screen text-gray-50 font-medium font-sans text-normal overflow-y-scroll overflow-x-hidden;
   }
 
   #root {
