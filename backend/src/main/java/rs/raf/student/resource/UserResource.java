@@ -33,7 +33,9 @@ public class UserResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAll(@QueryParam("page") int page, @QueryParam("size") int size, @QueryParam("sort") List<String> sort) {
+    public Response getAll(@QueryParam("page") int          page,
+                           @QueryParam("size") int          size,
+                           @QueryParam("sort") List<String> sort) {
         return ExceptionUtils.handleResponse(() -> Response.status(Status.OK)
                                                            .entity(service.getAll(Pageable.of(page, size, sort)))
                                                            .build());
