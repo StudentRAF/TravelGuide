@@ -34,8 +34,8 @@ const CMSUsers = () => {
            if (error.response?.status !== HttpStatusCode.Unauthorized)
              return;
 
-           clearUserDataAsync();
-           navigate("/cms");
+           clearUserDataAsync()
+             .then(() => navigate("/cms"));
          });
   }, [page]);
 
