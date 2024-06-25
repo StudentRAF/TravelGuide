@@ -32,4 +32,12 @@ public class PostgresAbstractRepository {
         );
     }
 
+    protected Connection createConnection(boolean autoCommit) throws SQLException {
+        Connection connection = createConnection();
+
+        connection.setAutoCommit(autoCommit);
+
+        return connection;
+    }
+
 }
