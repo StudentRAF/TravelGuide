@@ -21,4 +21,6 @@ public interface IArticleActivityRepository {
 
     List<ArticleActivity> create(Long articleId, List<Long> activityIds);
 
+    void delete(Long articleId, List<Long> activityIds);
+
 }

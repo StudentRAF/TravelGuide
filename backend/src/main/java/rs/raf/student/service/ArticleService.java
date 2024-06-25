@@ -75,7 +75,36 @@ public class ArticleService {
     }
 
     public ArticleGetDto update(ArticleUpdateDto updateDto) {
-        return mapArticle(repository.update(updateDto));
+        if (updateDto.getActivities() == null)
+            return mapArticle(repository.update(updateDto));
+
+        try (ExecutorService executors = Executors.newFixedThreadPool(3)) {
+            var futureArticle     = executors.submit(() -> repository.update(updateDto));
+            var futureActivityIds = executors.submit(() -> articleActivityRepository.findAllActivityIds(updateDto.getId()));
+
+            List<Long> activityIds      = futureActivityIds.get();
+            List<Long> addActivities    = updateDto.getActivities()
+                                                   .stream()
+                                                   .filter(activityId -> !activityIds.contains(activityId))
+                                                   .toList();
+            List<Long> removeActivities = activityIds.stream()
+                                                     .filter(activityId -> !updateDto.getActivities()
+                                                                                     .contains(activityId))
+                                                     .toList();
+
+            var futureAddedActivities   = executors.submit(() -> articleActivityRepository.create(updateDto.getId(), addActivities));
+            var futureRemovedActivities = executors.submit(() -> articleActivityRepository.delete(updateDto.getId(), removeActivities));
+
+            futureAddedActivities.get();
+            futureRemovedActivities.get();
+
+            return mapArticle(futureArticle.get());
+        }
+        catch (ExecutionException | InterruptedException exception) {
+            exception.printStackTrace(System.err);
+        }
+
+        return null;
     }
 
     public void delete(Long id) {

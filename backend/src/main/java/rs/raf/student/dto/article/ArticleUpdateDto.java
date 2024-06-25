@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import rs.raf.student.validation.NullOrNotBlank;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,5 +23,7 @@ public class ArticleUpdateDto {
 
     @NullOrNotBlank(message = "Article content cannot be blank.")
     private String content;
+
+    private List<Long> activities;
 
 }

@@ -160,6 +160,9 @@ public class PostgresArticleActivityRepository extends PostgresAbstractRepositor
 
     @Override
     public List<ArticleActivity> create(Long articleId, List<Long> activityIds) {
+        if (activityIds == null || activityIds.isEmpty())
+            return null;
+
         List<ArticleActivity> articleActivities = activityIds.stream().map(activityId -> new ArticleActivity(null, articleId, activityId))
                                                              .toList();
 
@@ -180,9 +183,10 @@ public class PostgresArticleActivityRepository extends PostgresAbstractRepositor
                                                                                         """
                                                                                         select *
                                                                                         from article_activity
-                                                                                        where article_id = ?
+                                                                                        where article_id = ? and activity_id = any(?)
                                                                                         """)
-                                                                                .prepareLong(articleId));
+                                                                                .prepareLong(articleId)
+                                                                                .prepareArray(PostgresType.BIGINT, activityIds));
 
             int index = 0;
             while (resultSet.next())
@@ -194,6 +198,31 @@ public class PostgresArticleActivityRepository extends PostgresAbstractRepositor
         }
 
         return articleActivities;
+    }
+
+    @Override
+    public void delete(Long articleId, List<Long> activityIds) {
+        if (activityIds == null || activityIds.isEmpty())
+            return;
+
+        try(
+            Connection       connection = createConnection(false);
+            StatementBuilder builder    = StatementBuilder.create(connection,
+                                                                  """
+                                                                  delete from article_activity
+                                                                  where article_id = ? and activity_id = ?
+                                                                  """)
+        ) {
+            for (Long activityId : activityIds)
+                builder.prepareLong(articleId)
+                       .prepareLong(activityId)
+                       .prepareBatch();
+
+            builder.executeBatch();
+        }
+        catch (Exception exception) {
+            throw new TGException(ExceptionType.REPOSITORY_ARTICLE_ACTIVITY_SQL_EXCEPTION, exception, exception.getMessage());
+        }
     }
 
 }
