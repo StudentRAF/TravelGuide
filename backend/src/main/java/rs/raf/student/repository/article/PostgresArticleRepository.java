@@ -60,13 +60,19 @@ public class PostgresArticleRepository extends PostgresAbstractRepository implem
         try(
             Connection       connection = createConnection();
             StatementBuilder builder    = StatementBuilder.create(connection,
-                                                                  """
-                                                                  select *
-                                                                  from article
+                                                                  """                                                                  
+                                                                  update article
+                                                                  set visits = visits + 1
                                                                   where id = ?
                                                                   """);
             ResultSet resultSet         = builder.prepareLong(id)
-                                                 .executeQuery()
+                                                 .executeUpdateReturning(StatementBuilder.create(connection,
+                                                                                                 """
+                                                                                                 select *
+                                                                                                 from article
+                                                                                                 where id = ?
+                                                                                                 """)
+                                                                                         .prepareLong(id))
         ) {
             if (resultSet.next())
                 return ResultSetReader.readArticle(resultSet);
