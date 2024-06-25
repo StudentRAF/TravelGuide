@@ -17,6 +17,8 @@ public interface IArticleActivityRepository {
 
     List<Activity> findAllActivitiesByArticleIds(List<Long> articleIds);
 
-    ArticleActivity create(Long articleId, Long activityId);
+    ArticleActivity create(Long articleId, Long activityIds);
+
+    List<ArticleActivity> create(Long articleId, List<Long> activityIds);
 
 }
