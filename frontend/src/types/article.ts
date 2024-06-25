@@ -19,8 +19,8 @@ export type ArticleCreate = {
   title:          string,
   content:        string,
   author_id:      number,
-  description_id: number,
-  //TODO: Activities
+  destination_id: number,
+  activities:     number[],
 }
 
 export type ArticleUpdate = {
