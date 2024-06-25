@@ -216,7 +216,7 @@ const ArticleForm = ({ className, article, destinations, activities, onSubmit, c
                     <FormField
                       name={"activities"}
                       key={activity.id}
-                      render={({field}) =>
+                      render={() =>
                         <FormItem>
                           <FormControl>
                             <div className="flex h-fit">
@@ -243,7 +243,7 @@ const ArticleForm = ({ className, article, destinations, activities, onSubmit, c
           }
           <FormField
             name="activities"
-            render={({field}) =>
+            render={() =>
               <FormMessage className="col-span-2 mx-auto"/>
             }
           />
