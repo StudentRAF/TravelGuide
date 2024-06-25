@@ -200,6 +200,16 @@ public class StatementBuilder implements AutoCloseable {
 
     //endregion Prepare Injectors
 
+    //region Auxiliary
+
+    public StatementBuilder addBatch() throws SQLException {
+        statement.addBatch();
+
+        return this;
+    }
+
+    //endregion Auxiliary
+
     //region Injectors
 
     private void injectNull(SQLType type, Integer sqlType) throws SQLException {
@@ -316,6 +326,23 @@ public class StatementBuilder implements AutoCloseable {
 
     public ResultSet executeUpdateReturning(StatementBuilder builder) throws SQLException {
         executeUpdate();
+
+        return builder.executeQuery();
+    }
+
+    public int[] executeBatch() throws SQLException {
+        prepareStatement();
+
+        int[] returns = statement.executeBatch();
+
+        if (!connection.getAutoCommit())
+            connection.commit();
+
+        return returns;
+    }
+
+    public ResultSet executeBatchReturning(StatementBuilder builder) throws SQLException {
+        executeBatch();
 
         return builder.executeQuery();
     }
