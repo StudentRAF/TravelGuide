@@ -198,17 +198,11 @@ public class StatementBuilder implements AutoCloseable {
         return addSortRecord(new SortRecord(column, order, nulls));
     }
 
-    //endregion Prepare Injectors
-
-    //region Auxiliary
-
-    public StatementBuilder addBatch() throws SQLException {
-        statement.addBatch();
-
-        return this;
+    public StatementBuilder prepareBatch() throws SQLException {
+        return addInjectorRecord(new InjectorRecord<>(SQLType.INTEGER, 0, this::injectBatch));
     }
 
-    //endregion Auxiliary
+    //endregion Prepare Injectors
 
     //region Injectors
 
@@ -262,6 +256,11 @@ public class StatementBuilder implements AutoCloseable {
 
     private void injectArray(SQLType type, Object[] elements) throws SQLException {
         statement.setArray(++counter, connection.createArrayOf(type.getName(), elements));
+    }
+
+    private void injectBatch(SQLType type, Integer value) throws SQLException {
+        statement.addBatch();
+        counter = 0;
     }
 
     //endregion Injectors
