@@ -67,7 +67,11 @@ public class ArticleService {
     }
 
     public ArticleGetDto create(ArticleCreateDto createDto) {
-        return mapArticle(repository.create(createDto));
+        Article article = repository.create(createDto);
+
+        articleActivityRepository.create(article.getId(), createDto.getActivities());
+
+        return mapArticle(article);
     }
 
     public ArticleGetDto update(ArticleUpdateDto updateDto) {

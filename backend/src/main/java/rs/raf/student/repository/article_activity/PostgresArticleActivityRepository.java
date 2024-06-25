@@ -16,7 +16,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class PostgresArticleActivityRepository extends PostgresAbstractRepository implements IArticleActivityRepository {
 
@@ -175,7 +174,7 @@ public class PostgresArticleActivityRepository extends PostgresAbstractRepositor
             for (Long activityId : activityIds)
                 builder.prepareLong(articleId)
                        .prepareLong(activityId)
-                       .addBatch();
+                       .prepareBatch();
 
             ResultSet resultSet = builder.executeBatchReturning(StatementBuilder.create(connection,
                                                                                         """
@@ -194,9 +193,7 @@ public class PostgresArticleActivityRepository extends PostgresAbstractRepositor
             throw new TGException(ExceptionType.REPOSITORY_ARTICLE_ACTIVITY_SQL_EXCEPTION, exception, exception.getMessage());
         }
 
-        throw new TGException(ExceptionType.REPOSITORY_ARTICLE_ACTIVITY_CREATE_NO_RESULT_SET,
-                              articleId.toString(),
-                              activityIds.toString());
+        return articleActivities;
     }
 
 }
