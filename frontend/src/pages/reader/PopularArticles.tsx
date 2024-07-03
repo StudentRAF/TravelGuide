@@ -16,7 +16,7 @@ const PopularArticles = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/TravelGuide/api/v1/articles?page=${page - 1}&size=${pageSize}&sort=visits`)
+    axios.get(`http://localhost:8080/TravelGuide/api/v1/articles?page=${page - 1}&size=${pageSize}&sort=visits desc`)
       .then(response => setArticlePage(response.data));
   }, [page]);
 
