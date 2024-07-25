@@ -26,6 +26,7 @@ import { Separator } from "@/components/common/Separator.tsx";
 import { CommentForm, CommentFormData } from "@/components/form/CommentForm.tsx";
 import CommentCard from "@/components/cards/CommentCard.tsx";
 import { Skeleton } from "@/components/common/Skeleton.tsx";
+import { Env } from "@/lib/utils.ts";
 
 type ArticleParams = {
   id: string
@@ -40,7 +41,7 @@ const Article = () => {
     if (!articleParams.id)
       return;
 
-    axios.get(`http://localhost:8080/TravelGuide/api/v1/articles/${articleParams.id}`)
+    axios.get(`${Env.API_URL}/articles/${articleParams.id}`)
          .then(response => setArticle(response.data));
   }, [articleParams.id]);
 
@@ -57,7 +58,7 @@ const Article = () => {
       content:      data.content,
     }
 
-    axios.post(`http://localhost:8080/TravelGuide/api/v1/comments`, comment)
+    axios.post(`${Env.API_URL}/comments`, comment)
          .then(response => {
            const comment: Comment = response.data;
 

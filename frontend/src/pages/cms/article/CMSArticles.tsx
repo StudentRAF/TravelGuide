@@ -24,6 +24,7 @@ import { Card } from "@/components/common/Card.tsx";
 import { Separator } from "@/components/common/Separator.tsx";
 import { Button } from "@/components/common/Button.tsx";
 import { useNavigate } from "react-router-dom";
+import { Env } from "@/lib/utils.ts";
 
 const CMSArticles = () => {
   const pageSize = 5;
@@ -32,7 +33,7 @@ const CMSArticles = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/TravelGuide/api/v1/articles?page=${page - 1}&size=${pageSize}&sort=created_at&sort=title`)
+    axios.get(`${Env.API_URL}/articles?page=${page - 1}&size=${pageSize}&sort=created_at&sort=title`)
          .then(response => setArticlePage(response.data));
   }, [page]);
 

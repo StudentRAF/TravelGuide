@@ -22,7 +22,7 @@ import { Card } from "@/components/common/Card.tsx";
 import { User, UserLogin } from "@/types/user.ts";
 import axios from "axios";
 import { setLocalStorageDataAsync, USER, USER_TOKEN } from "@/lib/local_storage.ts";
-
+import { Env } from "@/lib/utils.ts";
 
 const CMSLogin = () => {
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ const CMSLogin = () => {
       password: data.password,
     }
 
-    axios.post(`http://localhost:8080/TravelGuide/api/v1/users/login`, login)
+    axios.post(`${Env.API_URL}/users/login`, login)
          .then(response => {
            const user: User    = response.data;
            const token: string = response.headers["authorization"];

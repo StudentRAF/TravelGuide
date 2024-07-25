@@ -23,6 +23,7 @@ import DestinationMenu from "@/components/reader/DestinationMenu.tsx";
 import ArticleCard from "@/components/cards/ArticleCard.tsx";
 import { PaginationSection } from "@/components/common/Pagination.tsx";
 import ActivityMenu from "@/components/reader/ActivityMenu.tsx";
+import { Env } from "@/lib/utils.ts";
 
 type DestinationParams = {
   id: string
@@ -37,7 +38,7 @@ const ArticlesForDestination = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/TravelGuide/api/v1/articles/destination/${destinationParams.id}?page=${page - 1}&size=${pageSize}&sort=title`)
+    axios.get(`${Env.API_URL}/articles/destination/${destinationParams.id}?page=${page - 1}&size=${pageSize}&sort=title`)
       .then(response => setArticlePage(response.data));
   }, [destinationParams.id, page]);
 

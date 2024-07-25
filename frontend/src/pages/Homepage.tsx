@@ -23,6 +23,7 @@ import axios from "axios";
 import ArticleCard from "@/components/cards/ArticleCard.tsx";
 import { PaginationSection } from "@/components/common/Pagination.tsx";
 import { useNavigate } from "react-router-dom";
+import { Env } from "@/lib/utils.ts";
 
 const Homepage = () => {
   const pageSize = 5;
@@ -32,7 +33,7 @@ const Homepage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/TravelGuide/api/v1/articles?page=${page - 1}&size=${pageSize}&sort=created_at`)
+    axios.get(`${Env.API_URL}/articles?page=${page - 1}&size=${pageSize}&sort=created_at`)
       .then(response => setArticlePage(response.data));
   }, [page]);
 

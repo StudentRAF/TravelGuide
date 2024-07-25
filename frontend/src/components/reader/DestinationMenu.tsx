@@ -30,6 +30,7 @@ import { Separator } from "@/components/common/Separator.tsx";
 import { Skeleton } from "@/components/common/Skeleton.tsx";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/common/Card.tsx";
+import { Env } from "@/lib/utils.ts";
 
 const DestinationMenu = () => {
   const pageSize = 15;
@@ -40,7 +41,7 @@ const DestinationMenu = () => {
   const [destinationPage, setDestinationPage] = useState<Page<Destination>>();
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/TravelGuide/api/v1/destinations?page=${page - 1}&size=${pageSize}&sort=name`)
+    axios.get(`${Env.API_URL}/destinations?page=${page - 1}&size=${pageSize}&sort=name`)
          .then(response => {
            setDestinationPage(response.data)
          })

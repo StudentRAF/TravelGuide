@@ -22,6 +22,7 @@ import { ApplicationContext, ApplicationContextData } from "@/lib/context.ts";
 import { clearUserDataAsync } from "@/lib/local_storage.ts";
 import { UserForm, UserFormData } from "@/components/form/UserForm.tsx";
 import { Card } from "@/components/common/Card.tsx";
+import { Env } from "@/lib/utils.ts";
 
 type UserParams = {
   id: string
@@ -39,7 +40,7 @@ const CMSUser = () => {
       return;
     }
 
-    axios.get(`http://localhost:8080/TravelGuide/api/v1/users/${userParams.id}`, {
+    axios.get(`${Env.API_URL}/users/${userParams.id}`, {
             headers: {
               Authorization: `${application.data.authorization}`
             }
@@ -66,7 +67,7 @@ const CMSUser = () => {
       enabled: data.enabled === "true",
     }
 
-    axios.put(`http://localhost:8080/TravelGuide/api/v1/users`, user, {
+    axios.put(`${Env.API_URL}/users`, user, {
             headers: {
               Authorization: `${application.data.authorization}`
             }

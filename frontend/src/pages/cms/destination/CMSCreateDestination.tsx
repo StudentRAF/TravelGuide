@@ -21,6 +21,7 @@ import axios from "axios";
 import { Card } from "@/components/common/Card.tsx";
 import { DestinationForm, DestinationFormData } from "@/components/form/DestinationForm.tsx";
 import { DestinationCreate } from "@/types/destination.ts";
+import { Env } from "@/lib/utils.ts";
 
 const CMSCreateDestination = () => {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ const CMSCreateDestination = () => {
       description: data.description,
     }
 
-    axios.post(`http://localhost:8080/TravelGuide/api/v1/destinations`, create, {
+    axios.post(`${Env.API_URL}/destinations`, create, {
             headers: {
               Authorization: `${application.data.authorization}`
             }

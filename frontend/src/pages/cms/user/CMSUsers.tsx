@@ -26,6 +26,7 @@ import UserCard from "@/components/cards/UserCard.tsx";
 import { ApplicationContext, ApplicationContextData } from "@/lib/context.ts";
 import { clearUserDataAsync } from "@/lib/local_storage.ts";
 import { useNavigate } from "react-router-dom";
+import { Env } from "@/lib/utils.ts";
 
 const CMSUsers = () => {
   const pageSize = 5;
@@ -40,7 +41,7 @@ const CMSUsers = () => {
       return;
     }
 
-    axios.get(`http://localhost:8080/TravelGuide/api/v1/users?page=${page - 1}&size=${pageSize}&sort=role_id&sort=first_name`, {
+    axios.get(`${Env.API_URL}/users?page=${page - 1}&size=${pageSize}&sort=role_id&sort=first_name`, {
             headers: {
               Authorization: application.data.authorization,
             }

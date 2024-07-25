@@ -23,6 +23,7 @@ import ArticleCard from "@/components/cards/ArticleCard.tsx";
 import { PaginationSection } from "@/components/common/Pagination.tsx";
 import ActivityMenu from "@/components/reader/ActivityMenu.tsx";
 import { useNavigate, useParams } from "react-router-dom";
+import { Env } from "@/lib/utils.ts";
 
 type ActivityParams = {
   id: string
@@ -37,7 +38,7 @@ const ArticlesForActivity = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/TravelGuide/api/v1/articles/activity/${activityParams.id}?page=${page - 1}&size=${pageSize}&sort=title`)
+    axios.get(`${Env.API_URL}/articles/activity/${activityParams.id}?page=${page - 1}&size=${pageSize}&sort=title`)
       .then(response => setArticlePage(response.data));
   }, [activityParams.id, page]);
 

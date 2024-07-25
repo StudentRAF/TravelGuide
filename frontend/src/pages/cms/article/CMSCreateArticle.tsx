@@ -25,6 +25,7 @@ import axios, { AxiosError, HttpStatusCode } from "axios";
 import { clearUserDataAsync } from "@/lib/local_storage.ts";
 import { ArticleForm, ArticleFormData } from "@/components/form/ArticleForm.tsx";
 import { Card } from "@/components/common/Card.tsx";
+import { Env } from "@/lib/utils.ts";
 
 const CMSCreateArticle = () => {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ const CMSCreateArticle = () => {
       return;
     }
 
-    axios.get(`http://localhost:8080/TravelGuide/api/v1/activities`, {
+    axios.get(`${Env.API_URL}/activities`, {
       headers: {
         Authorization: `${application.data.authorization}`
       }
@@ -58,7 +59,7 @@ const CMSCreateArticle = () => {
       return;
     }
 
-    axios.get(`http://localhost:8080/TravelGuide/api/v1/destinations`, {
+    axios.get(`${Env.API_URL}/destinations`, {
       headers: {
         Authorization: `${application.data.authorization}`
       }
@@ -84,7 +85,7 @@ const CMSCreateArticle = () => {
       activities:     data.activities.map((activity) => activity.id),
     }
 
-    axios.post(`http://localhost:8080/TravelGuide/api/v1/articles`, create, {
+    axios.post(`${Env.API_URL}/articles`, create, {
             headers: {
               Authorization: `${application.data.authorization}`
             }

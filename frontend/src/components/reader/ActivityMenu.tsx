@@ -30,6 +30,7 @@ import { Skeleton } from "@/components/common/Skeleton.tsx";
 import { useNavigate } from "react-router-dom";
 import { Activity } from "@/types/activity.ts";
 import { Card } from "@/components/common/Card.tsx";
+import { Env } from "@/lib/utils.ts";
 
 const DestinationMenu = () => {
   const pageSize = 15;
@@ -40,7 +41,7 @@ const DestinationMenu = () => {
   const [activityPage, setActivityPage] = useState<Page<Activity>>();
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/TravelGuide/api/v1/activities?page=${page - 1}&size=${pageSize}&sort=name`)
+    axios.get(`${Env.API_URL}/activities?page=${page - 1}&size=${pageSize}&sort=name`)
          .then(response => {
            setActivityPage(response.data)
          })

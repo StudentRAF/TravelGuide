@@ -21,6 +21,7 @@ import { Destination } from "@/types/destination.ts";
 import DestinationCard from "@/components/cards/DestinationCard.tsx";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Env } from "@/lib/utils.ts";
 
 const Destinations = () => {
   const pageSize = 5;
@@ -30,7 +31,7 @@ const Destinations = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/TravelGuide/api/v1/destinations?page=${page - 1}&size=${pageSize}&sort=name`)
+    axios.get(`${Env.API_URL}/destinations?page=${page - 1}&size=${pageSize}&sort=name`)
          .then(response => setDestinationPage(response.data));
   }, [page]);
 

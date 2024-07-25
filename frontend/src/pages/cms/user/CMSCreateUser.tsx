@@ -21,6 +21,7 @@ import { ApplicationContext, ApplicationContextData } from "@/lib/context.ts";
 import axios from "axios";
 import { UserForm, UserFormData } from "@/components/form/UserForm.tsx";
 import { Card } from "@/components/common/Card.tsx";
+import { Env } from "@/lib/utils.ts";
 
 const CMSCreteUser = () => {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ const CMSCreteUser = () => {
       confirm_password: data.password,
     }
 
-    axios.post(`http://localhost:8080/TravelGuide/api/v1/users`, user, {
+    axios.post(`${Env.API_URL}/users`, user, {
       headers: {
         Authorization: `${application.data.authorization}`
       }

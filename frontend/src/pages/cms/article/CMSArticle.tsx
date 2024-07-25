@@ -25,6 +25,7 @@ import { ArticleForm, ArticleFormData } from "@/components/form/ArticleForm.tsx"
 import { Destination } from "@/types/destination.ts";
 import { Activity } from "@/types/activity.ts";
 import { Page } from "@/types/common.ts";
+import { Env } from "@/lib/utils.ts";
 
 type ArticleParams = {
   id: string
@@ -44,7 +45,7 @@ const CMSArticle = () => {
       return;
     }
 
-    axios.get(`http://localhost:8080/TravelGuide/api/v1/articles/${articleParams.id}`, {
+    axios.get(`${Env.API_URL}/articles/${articleParams.id}`, {
       headers: {
         Authorization: `${application.data.authorization}`
       }
@@ -64,7 +65,7 @@ const CMSArticle = () => {
       return;
     }
 
-    axios.get(`http://localhost:8080/TravelGuide/api/v1/activities`, {
+    axios.get(`${Env.API_URL}/activities`, {
             headers: {
               Authorization: `${application.data.authorization}`
             }
@@ -84,7 +85,7 @@ const CMSArticle = () => {
       return;
     }
 
-    axios.get(`http://localhost:8080/TravelGuide/api/v1/destinations`, {
+    axios.get(`${Env.API_URL}/destinations`, {
       headers: {
         Authorization: `${application.data.authorization}`
       }
@@ -109,7 +110,7 @@ const CMSArticle = () => {
       activities: data.activities.map((activity) => activity.id),
     }
 
-    axios.put(`http://localhost:8080/TravelGuide/api/v1/articles`, update, {
+    axios.put(`${Env.API_URL}/articles`, update, {
             headers: {
               Authorization: `${application.data.authorization}`
             }

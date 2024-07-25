@@ -22,6 +22,7 @@ import axios, { AxiosError, HttpStatusCode } from "axios";
 import { clearUserDataAsync } from "@/lib/local_storage.ts";
 import { Destination, DestinationUpdate } from "@/types/destination.ts";
 import { Card } from "@/components/common/Card.tsx";
+import { Env } from "@/lib/utils.ts";
 
 type DestinationParams = {
   id: string
@@ -39,7 +40,7 @@ const CMSDestination = () => {
       return;
     }
 
-    axios.get(`http://localhost:8080/TravelGuide/api/v1/destinations/${destinationParams.id}`, {
+    axios.get(`${Env.API_URL}/destinations/${destinationParams.id}`, {
       headers: {
         Authorization: `${application.data.authorization}`
       }
@@ -63,7 +64,7 @@ const CMSDestination = () => {
       description: data.description,
     }
 
-    axios.put(`http://localhost:8080/TravelGuide/api/v1/destinations`, update, {
+    axios.put(`${Env.API_URL}/destinations`, update, {
             headers: {
               Authorization: `${application.data.authorization}`
             }

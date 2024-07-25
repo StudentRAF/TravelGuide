@@ -21,3 +21,7 @@ export function cn(...inputs: ClassValue[]) {
   // return clsx(inputs);
   return twMerge(clsx(inputs))
 }
+
+export const Env = {
+  API_URL: import.meta.env.TG_API_URL
+}
